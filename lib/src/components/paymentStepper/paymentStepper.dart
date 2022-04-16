@@ -21,7 +21,7 @@ class _PaymentStepperState extends State<PaymentStepper> {
     {'title': 'CARD', 'icon': Icons.credit_card},
   ];
 
-  _updateIndex(int params){
+  _updateIndex(int params) {
     setState(() {
       activeIndex = params;
     });
@@ -35,39 +35,48 @@ class _PaymentStepperState extends State<PaymentStepper> {
       Step3(active: activePaymentIndex)
     ];
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          activeIndex != 2 ? _givingText() : SizedBox.shrink(),
-          Container(
-              color: KColors.kPrimaryColor,
-              padding: EdgeInsets.only(left: 12, right: 12, top: 12, bottom: activeIndex == 2 ? 0 : 12),
-              margin: const EdgeInsets.only(top: 10),
-              child: activeIndex != 2
-                  ? _tabs()
-                  : SizedBox(
-                      height: 100,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [_tabs(), _paymentTabs()],
-                      ),
-                    )),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20.0),
-            child: components[activeIndex],
-            decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide.none,
-                    left: BorderSide(
-                        width: 1, color: Colors.grey.withOpacity(.3)),
-                    right: BorderSide(
-                        width: 1, color: Colors.grey.withOpacity(.3)),
-                    bottom: BorderSide(
-                        width: 1, color: Colors.grey.withOpacity(.3)))),
-          )
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            activeIndex != 2 ? _givingText() : const SizedBox.shrink(),
+            Container(
+                color: KColors.kPrimaryColor,
+                padding: EdgeInsets.only(
+                    left: 12,
+                    right: 12,
+                    top: 12,
+                    bottom: activeIndex == 2 ? 0 : 12),
+                margin: const EdgeInsets.only(top: 10),
+                child: activeIndex != 2
+                    ? _tabs()
+                    : SizedBox(
+                        height: 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [_tabs(), _paymentTabs()],
+                        ),
+                      )),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20.0),
+              child: components[activeIndex],
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide(
+                          width: 1, color: Colors.grey.withOpacity(.3)),
+                      right: BorderSide(
+                          width: 1, color: Colors.grey.withOpacity(.3)),
+                      bottom: BorderSide(
+                          width: 1, color: Colors.grey.withOpacity(.3)))),
+            ),
+            // giving_thanks_text
+            activeIndex == 1 ? const SizedBox.shrink() : _givingThanksText()
+          ],
+        ),
       ),
     );
   }
@@ -190,12 +199,40 @@ class _PaymentStepperState extends State<PaymentStepper> {
         ),
         const Text(
           'To give your DONATION, simply fill in the details below. You can check-out by Debit/Credit Card or Momo',
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 16),
         ),
         const SizedBox(
           height: 60,
         )
       ],
+    );
+  }
+
+  Widget _givingThanksText() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+              'What a blessing to hear from you, and I\'m thankful for your gift planted to God through this ministry', style: TextStyle(fontSize: 16),),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+              'We\'re promised in God\'s word that when we sow unto Him in Faith, we can believe for a multiplied harvest of blessing on our seed (Luke 6:38)', style: TextStyle(fontSize: 16),),
+          SizedBox(
+            height: 20,
+          ),
+          Text('God is faithful... so be expecting miracles', style: TextStyle(fontSize: 16),),
+          SizedBox(
+            height: 50,
+          )
+        ],
+      ),
     );
   }
 }

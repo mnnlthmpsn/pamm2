@@ -1,14 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pamm2/src/components/drawer.dart';
 
-class Store extends StatefulWidget {
+class Store extends StatelessWidget {
   const Store({Key? key}) : super(key: key);
-
-  @override
-  State<Store> createState() => _StoreState();
-}
-
-class _StoreState extends State<Store> {
 
   static const testItems = [
     {
@@ -35,15 +30,30 @@ class _StoreState extends State<Store> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Material(child: _giveParent(context)));
+    return SafeArea(
+        child: Material(child: Scaffold(
+          appBar: appBar(),
+          body: _giveParent(context),
+          drawer: const kDrawer(),
+        )));
   }
 
   Widget _giveParent(BuildContext context) {
-    return Wrap(
-      alignment: testItems.length % 2 == 0 ? WrapAlignment.center : WrapAlignment.start,
-      children: testItems
-          .map((testItem) => storeItem(context, testItem))
-          .toList(),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Wrap(
+        alignment: testItems.length % 2 == 0 ? WrapAlignment.center : WrapAlignment.start,
+        children: testItems
+            .map((testItem) => storeItem(context, testItem))
+            .toList(),
+      ),
+    );
+  }
+
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      toolbarHeight: 0,
+      backgroundColor: Colors.transparent,
     );
   }
 

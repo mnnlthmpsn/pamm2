@@ -9,27 +9,17 @@ class Bible extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: Center(
+      body: const Center(
         child: Text('Bible'),
       ),
-      drawer: kDrawer(),
     );
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_rounded)),
-          const Text('Bible', style: TextStyle(fontSize: 18)),
-          openDrawer()
-        ],
-      ),
+      title: const Text('Bible', style: TextStyle(fontSize: 18))
     );
   }
 }

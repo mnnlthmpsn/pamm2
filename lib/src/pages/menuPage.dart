@@ -3,16 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/helpers.dart';
+import 'package:pamm2/src/components/drawer.dart';
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  const MenuPage({Key? key, required this.scaffoldKey}) : super(key: key);
 
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
-  final Duration _duration = Duration(milliseconds: 600);
+  final Duration _duration = const Duration(milliseconds: 600);
   int currentPage = 0;
 
   Timer? timer;
@@ -33,39 +36,124 @@ class _MenuPageState extends State<MenuPage> {
   void updatePage() {
     // do request here
     setState(() =>
-        currentPage != 2 ? currentPage = currentPage + 1 : currentPage = 0);
+        currentPage != 4 ? currentPage = currentPage + 1 : currentPage = 0);
   }
 
   List<String> images = [
-    'assets/images/2.jpg',
-    'assets/images/1.jpg',
-    'assets/images/3.jpg',
+    'assets/images/1.png',
+    'assets/images/2.png',
+    'assets/images/3.png',
+    'assets/images/4.png',
+    'assets/images/5.png',
   ];
 
   List menus = [
     [
-      {'title': 'PAMM TV', 'icon': Icons.tv_rounded, 'route': 'tv'},
-      {'title': 'iRadio', 'icon': Icons.radio_rounded, 'route': 'radio'},
+      {
+        'title': 'PAMM TV',
+        'icon': Image.asset(
+          'assets/icons/tv.png',
+          width: 35,
+          height: 35,
+        ),
+        'route': 'tv',
+        'image': true
+      },
+      {
+        'title': 'iRadio',
+        'icon': Image.asset(
+          'assets/icons/radio.png',
+          width: 35,
+          height: 35,
+        ),
+        'route': 'radio',
+        'image': true
+      },
       {
         'title': 'Partner',
-        'icon': Icons.person_add_alt_1_rounded,
-        'route': 'partner'
+        'icon': Image.asset(
+          'assets/icons/partner.png',
+          width: 35,
+          height: 35,
+        ),
+        'route': 'partner',
+        'image': true
       }
     ],
     [
-      {'title': 'Bible', 'icon': Icons.menu_book_rounded, 'route': 'bible'},
-      {'title': 'PAMA', 'icon': Icons.group_add_rounded, 'route': 'pama'},
+      {
+        'title': 'Give',
+        'icon': Image.asset(
+          'assets/icons/give 2.png',
+          width: 35,
+          height: 35,
+        ),
+        'route': 'give_2',
+        'image': true
+      },
+      {
+        'title': 'eStore',
+        'icon': Icons.shopping_cart_rounded,
+        'route': 'store_2',
+        'image': false
+      },
+      {
+        'title': 'Bible',
+        'icon': Icons.menu_book_rounded,
+        'route': 'bible',
+        'image': false
+      },
+    ],
+    [
+      {
+        'title': 'PAMA',
+        'icon': Icons.group_add_rounded,
+        'route': 'pama',
+        'image': false
+      },
       {
         'title': 'Archives',
-        'icon': Icons.play_arrow_rounded,
-        'route': 'archives'
-      }
+        'icon': Image.asset(
+          'assets/icons/archives.png',
+          width: 30,
+          height: 30,
+        ),
+        'route': 'archives',
+        'image': true
+      },
+      {
+        'title': 'Social',
+        'icon': Image.asset(
+          'assets/icons/all_social.png',
+          width: 35,
+          height: 35,
+        ),
+        'route': 'social',
+        'image': true
+      },
     ]
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: IconButton(
+          color: KColors.kDarkColor,
+          icon: const Icon(
+            Icons.menu,
+            size: 30,
+          ),
+          onPressed: () {
+            widget.scaffoldKey.currentState!.openDrawer();
+          },
+        )
+      ),
+      backgroundColor: KColors.kLightColor,
       body: Stack(
         children: [
           _bg(),
@@ -74,18 +162,11 @@ class _MenuPageState extends State<MenuPage> {
               left: 0,
               bottom: MediaQuery.of(context).size.height * .12,
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * .3,
+                  height: MediaQuery.of(context).size.height * .45,
                   child: _menuItems())),
-          Positioned(
-            top: 20,
-            left: 10,
-            child: SizedBox(
-              height: 50, width: 50,
-              child: Image.asset('assets/images/logo.png'),
-            ),
-          )
         ],
       ),
+      drawer: const kDrawer(),
     );
   }
 
@@ -105,6 +186,11 @@ class _MenuPageState extends State<MenuPage> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(3, (index) => _menuCard(1, index))),
+          ),
+          Expanded(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(3, (index) => _menuCard(2, index))),
           )
         ],
       ),
@@ -120,13 +206,19 @@ class _MenuPageState extends State<MenuPage> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 onPrimary: KColors.kPrimaryColor,
-                primary: Colors.white,
+                primary: KColors.kLightColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15))),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(menus[parentIndex][index]['icon']),
+                menus[parentIndex][index]['image'] == true
+                    ? menus[parentIndex][index]['icon']
+                    : Icon(
+                        menus[parentIndex][index]['icon'],
+                        color: KColors.kPrimaryColor,
+                        size: 35,
+                      ),
                 Text(
                   menus[parentIndex][index]['title'],
                   textAlign: TextAlign.center,
@@ -146,27 +238,37 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _bg() {
-    return AnimatedSwitcher(
-      duration: _duration,
-      child: SizedBox(key: ValueKey<int>(currentPage), child: pageBuilder()),
+    return Container(
+      padding: const EdgeInsets.only(top: 25),
+      color: KColors.kLightColor,
+      child: AnimatedSwitcher(
+        duration: _duration,
+        child: SizedBox(key: ValueKey<int>(currentPage), child: pageBuilder()),
+      ),
     );
   }
 
   Widget pageBuilder() {
     return Builder(
       builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: KColors.kPrimaryColor,
-            image: DecorationImage(
+        return Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * .01),
+              height: double.infinity,
+              width: double.infinity,
+              child: Image.asset(
+                images[currentPage],
                 fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-                image: AssetImage(images[currentPage]),
-                colorFilter: ColorFilter.mode(
-                    KColors.kPrimaryColor.withOpacity(.7), BlendMode.dstATop)),
-          ),
+              ),
+            ),
+            // Container(
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   color: KColors.kPrimaryColor.withOpacity(.2),
+            // ),
+          ],
         );
       },
     );

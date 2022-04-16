@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/helpers.dart';
 
 class kDrawer extends StatelessWidget {
   const kDrawer({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class kDrawer extends StatelessWidget {
       'icon': Icons.person_pin_rounded
     },
     {'title': 'About Us', 'route': 'about', 'icon': Icons.info_outline_rounded},
-    {'title': 'Give Online', 'route': 'give', 'icon': Icons.favorite_rounded},
+    {'title': 'Give Online', 'route': 'give_2', 'icon': Icons.favorite_rounded},
     {
       'title': 'Share Testimony',
       'route': 'testimony',
@@ -33,7 +34,7 @@ class kDrawer extends StatelessWidget {
     {'title': 'Share App', 'route': 'share', 'icon': Icons.share_rounded},
     {
       'title': 'Events',
-      'route': 'events',
+      'route': 'events_2',
       'icon': Icons.event_available_outlined
     },
     {'title': 'Rate App', 'route': 'rate', 'icon': Icons.star_rate},
@@ -51,9 +52,12 @@ class kDrawer extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   enableFeedback: true,
-                  onTap: (){},
+                  onTap: () {
+                    Navigator.pop(context);
+                    newPage(context, menuItems[index]['route']);
+                  },
                   leading: Icon(menuItems[index]['icon'], color: Colors.white,),
-                  title: Text(menuItems[index]['title'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                  title: Text(menuItems[index]['title'], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                 );
               }),
         ),
@@ -62,12 +66,12 @@ class kDrawer extends StatelessWidget {
   }
 }
 
-Widget openDrawer() {
+Widget openDrawer(Color color) {
   return Builder(
     builder: (BuildContext context) {
       return InkWell(
         enableFeedback: true,
-        child: const HeroIcon(HeroIcons.menuAlt3),
+        child: Icon(Icons.menu, color: color, size: 30,),
         onTap: () => Scaffold.of(context).openDrawer(),
       );
     },

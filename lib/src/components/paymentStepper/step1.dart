@@ -41,12 +41,8 @@ class _Step1State extends State<Step1> {
             const SizedBox(
               height: 50,
             ),
-            KButton(onPressed: widget.updateIndex),
+            KButton(onPressed: widget.updateIndex, color: KColors.kPrimaryColor,),
             const SizedBox(height: 20),
-            Text(
-              'PAMA Ministries',
-              style: TextStyle(fontSize: 10, color: KColors.kPrimaryColor),
-            )
           ],
         ),
       ),

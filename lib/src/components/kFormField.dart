@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
 
 class KFormField extends StatelessWidget {
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final bool? textarea;
+  final Color? enabledBorder;
 
-  const KFormField({Key? key, required this.label, required this.icon})
+  const KFormField(
+      {Key? key,
+      required this.label,
+      this.icon,
+      this.textarea,
+      this.enabledBorder})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       cursorColor: KColors.kTextColorDark,
+      maxLines: textarea != null ? 3 : 1,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           labelText: label,
           labelStyle: TextStyle(fontSize: 14, color: KColors.kTextColorDark),
-          prefixIcon: Icon(
-            icon,
-            size: 20,
-            color: Colors.grey.withOpacity(.5),
-          ),
           enabledBorder: textBorder(),
-          focusedBorder: textBorder()),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(width: 1, color: KColors.kPrimaryColor))),
     );
   }
 

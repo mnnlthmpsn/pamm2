@@ -1,8 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/src/components/drawer.dart';
 import 'package:pamm2/src/pages/Give.dart';
+import 'package:pamm2/src/pages/drawer/contact.dart';
 import 'package:pamm2/src/pages/eStore.dart';
 import 'package:pamm2/src/pages/menuPage.dart';
 
@@ -16,19 +19,13 @@ class Home extends StatefulWidget {
     {'title': 'More', 'icon': Icons.menu_rounded},
   ];
 
-  static const List pages = [
-    MenuPage(),
-    Give(),
-    Store(),
-    Center(child: Text('More items')),
-  ];
-
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int activeIndex = 0;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   Widget iconBuilder(item, index) {
     return Padding(
@@ -60,35 +57,39 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+    List pages = [
+      MenuPage(scaffoldKey: scaffoldKey),
+      const Give(),
+      const Store(),
+      const Contact(src: 'home'),
+    ];
+
     return Scaffold(
+      key: scaffoldKey,
       extendBody: activeIndex == 0 ? true : false,
-      appBar: activeIndex != 0
-          ? AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: KColors.kPrimaryColor,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                  Text(
-                    Home.menuItems[activeIndex]['title'],
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  openDrawer()
-                ],
-              ),
-            )
-          : AppBar(
-              backgroundColor: KColors.kPrimaryColor,
-              toolbarHeight: 0,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
+        automaticallyImplyLeading: false,
+        toolbarHeight: activeIndex == 0 ? 0 : 56,
+        backgroundColor:
+            activeIndex == 0 ? Colors.transparent : KColors.kLightColor,
+        elevation: 4,
+        foregroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              activeIndex != 0 ? Home.menuItems[activeIndex]['title'] : '',
+              style: TextStyle(fontSize: 16, color: KColors.kDarkColor, fontWeight: FontWeight.bold),
             ),
-      body: Home.pages[activeIndex],
-      drawer: kDrawer(),
+          ],
+        ),
+      ),
+      body: pages[activeIndex],
+      drawer: const kDrawer(),
       bottomNavigationBar: _bottomNavigation(),
     );
   }

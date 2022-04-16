@@ -12,26 +12,16 @@ class PAMA extends StatelessWidget {
       appBar: _appBar(context),
       body: const SafeArea(
           child: WebViewBuilder(url: 'https://pama.vercel.app/pama')),
-      drawer: const kDrawer(),
     );
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_rounded)),
-          const Text(
-            'PAMA',
-              style: TextStyle(fontSize: 18)
-          ),
-          openDrawer()
-        ],
+      title: const Text(
+          'PAMA',
+          style: TextStyle(fontSize: 18)
       ),
     );
   }

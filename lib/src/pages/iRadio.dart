@@ -19,31 +19,16 @@ class _IRadioState extends State<IRadio> {
     return Scaffold(
       appBar: _appBar(),
       body: _body(),
-      drawer: kDrawer(),
     );
   }
 
   PreferredSizeWidget _appBar() {
     return AppBar(
       elevation: 0,
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       foregroundColor: KColors.kPrimaryColor,
       backgroundColor: Colors.white,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_rounded)),
-          SizedBox(
-            height: 40,
-            width: 40,
-            child: Image.asset('assets/images/logo.png'),
-          ),
-          openDrawer()
-        ],
-      ),
-      centerTitle: true,
+      title: const Text('PAMA Radio', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),)
     );
   }
 

@@ -29,10 +29,7 @@ class Welcome extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Center(
-        child: Stack(children: [
-          Lottie.network('https://assets1.lottiefiles.com/private_files/lf30_iwurvzum.json'),
-          Image.asset('assets/images/pastor.png'),
-        ]),
+        child: Image.asset('assets/images/pastor.png')
       ),
     );
   }

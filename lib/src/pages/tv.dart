@@ -12,24 +12,14 @@ class TV extends StatelessWidget {
       body: const Center(
         child: Text('TV'),
       ),
-      drawer: const kDrawer(),
     );
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.arrow_back_rounded)),
-          const Text('PAMM TV', style: TextStyle(fontSize: 18)),
-          openDrawer()
-        ],
-      ),
+      title: const Text('PAMM TV', style: TextStyle(fontSize: 18))
     );
   }
 }

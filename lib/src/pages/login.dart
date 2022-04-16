@@ -87,13 +87,14 @@ class _LoginState extends State<Login> {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(
+            color: KColors.kPrimaryColor,
               image: DecorationImage(
                   fit: BoxFit.cover,
                   alignment: Alignment.topCenter,
                   colorFilter: ColorFilter.mode(
-                      KColors.kPrimaryColor.withOpacity(.6),
+                      KColors.kLightColor.withOpacity(.6),
                       BlendMode.dstATop),
-                  image: const AssetImage('assets/images/1.jpg'))),
+                  image: const AssetImage('assets/images/3.png'))),
         ),
       ),
     );

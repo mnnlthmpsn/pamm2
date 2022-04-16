@@ -19,12 +19,12 @@ class Step2 extends StatelessWidget {
           const SizedBox(height: 30),
           Row(
             children: const [
-              Expanded(child: KFormField(label: 'Firstname', icon: Icons.person_rounded,)),
+              Expanded(child: KFormField(label: 'First Name', icon: Icons.person_rounded,)),
               SizedBox(
                 width: 8,
               ),
               Expanded(
-                child: KFormField(label: 'Lastname', icon: Icons.person_rounded),
+                child: KFormField(label: 'Last Name', icon: Icons.person_rounded),
               )
             ],
           ),
