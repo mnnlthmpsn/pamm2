@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/src/components/drawer.dart';
+import 'package:pamm2/src/components/webViewBuilder.dart';
 
 class Bible extends StatelessWidget {
   const Bible({Key? key}) : super(key: key);
@@ -9,9 +9,7 @@ class Bible extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(context),
-      body: const Center(
-        child: Text('Bible'),
-      ),
+      body: const WebViewBuilder(url: 'https://www.bible.com/en-GB/bible/116/GEN.1.NLT'),
     );
   }
 

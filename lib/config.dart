@@ -6,7 +6,7 @@ class KColors {
   static Color kDarkColor = const Color(0xFF222F3E);
   static Color kTextColorDark = const Color(0xFF1A1A1C);
   static Color kTextColorLight = const Color(0xFFD6D8DA);
-  static Color kLightColor = const Color(0xFFE5E5E5);
+  static Color kLightColor = const Color(0xFFEFEFEF);
 }
 
 class KTextTheme {

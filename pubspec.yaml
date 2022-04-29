@@ -36,10 +36,14 @@ dependencies:
   lottie: ^1.2.2
   cached_network_image: ^3.2.0
   country_picker: ^2.0.12
+  syncfusion_flutter_gauges: ^20.1.48
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  assets_audio_player: ^3.0.4+1
+  marquee:
+  url_launcher:
 
 dev_dependencies:
   flutter_test:

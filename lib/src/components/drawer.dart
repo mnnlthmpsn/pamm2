@@ -7,11 +7,11 @@ class kDrawer extends StatelessWidget {
   const kDrawer({Key? key}) : super(key: key);
 
   static const List<Map<String, dynamic>> menuItems = [
-    {
-      'title': 'My Account',
-      'route': 'account',
-      'icon': Icons.person_pin_rounded
-    },
+    // {
+    //   'title': 'My Account',
+    //   'route': 'account',
+    //   'icon': Icons.person_pin_rounded
+    // },
     {'title': 'About Us', 'route': 'about', 'icon': Icons.info_outline_rounded},
     {'title': 'Give Online', 'route': 'give_2', 'icon': Icons.favorite_rounded},
     {
@@ -26,7 +26,7 @@ class kDrawer extends StatelessWidget {
     },
     {
       'title': 'Social Media',
-      'route': 'social-media',
+      'route': 'social',
       'icon': Icons.alternate_email_outlined
     },
     {'title': 'Prayer Request', 'route': 'prayer', 'icon': Icons.rate_review},
