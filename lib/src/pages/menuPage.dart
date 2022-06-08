@@ -102,7 +102,7 @@ class _MenuPageState extends State<MenuPage> {
         'icon': Icons.menu_book_rounded,
         'route': 'bible',
         'image': false
-      },
+      }
     ],
     [
       {
@@ -130,7 +130,7 @@ class _MenuPageState extends State<MenuPage> {
         ),
         'route': 'social',
         'image': true
-      },
+      }
     ]
   ];
 

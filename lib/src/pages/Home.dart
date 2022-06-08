@@ -1,9 +1,13 @@
+import 'package:badges/badges.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/helpers.dart';
 import 'package:pamm2/src/components/drawer.dart';
+import 'package:pamm2/src/controllers/cart_controllelr.dart';
 import 'package:pamm2/src/pages/Give.dart';
 import 'package:pamm2/src/pages/drawer/contact.dart';
 import 'package:pamm2/src/pages/eStore.dart';
@@ -26,6 +30,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int activeIndex = 0;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  CartController cartController = Get.put(CartController());
+
 
   Widget iconBuilder(item, index) {
     return Padding(
@@ -57,7 +63,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     List pages = [
       MenuPage(scaffoldKey: scaffoldKey),
       const Give(),
@@ -67,15 +72,16 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       key: scaffoldKey,
-      extendBody: activeIndex == 0 ? true : false,
+      extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
+        systemOverlayStyle:
+            SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
         automaticallyImplyLeading: false,
         toolbarHeight: activeIndex == 0 ? 0 : 56,
         backgroundColor:
-            activeIndex == 0 ? Colors.transparent : KColors.kLightColor,
-        elevation: 4,
+            activeIndex == 0 ? Colors.transparent : KColors.kPrimaryColor,
+        elevation: 0,
         foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,8 +89,24 @@ class _HomeState extends State<Home> {
           children: [
             Text(
               activeIndex != 0 ? Home.menuItems[activeIndex]['title'] : '',
-              style: TextStyle(fontSize: 16, color: KColors.kDarkColor, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 16,
+                  color: KColors.kLightColor,
+                  fontWeight: FontWeight.bold),
             ),
+            activeIndex == 2
+                ? IconButton(
+                onPressed: () => newPage(context, 'billing'),
+                icon: GetBuilder<CartController>(builder: (cartController) {
+                  return Badge(
+                      child: const Icon(Icons.shopping_cart),
+                      badgeColor: KColors.kLightColor,
+                      badgeContent: Text(
+                        cartController.getCartLength(),
+                        style: TextStyle(color: KColors.kPrimaryColor),
+                      ));
+                }))
+                : const SizedBox.shrink()
           ],
         ),
       ),

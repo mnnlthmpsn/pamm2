@@ -1,8 +1,11 @@
-
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/accordion/gf_accordion.dart';
+import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/src/repos/programmeRepo.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class IRadio extends StatefulWidget {
@@ -17,11 +20,14 @@ class _IRadioState extends State<IRadio> {
   bool _isChanging = false;
 
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+  final ProgrammeRepo programmeRepo = ProgrammeRepo();
+  late Future myFuture;
 
   @override
   void initState() {
     super.initState();
     openPlayer();
+    myFuture = programmeRepo.getProgrammes();
   }
 
   void openPlayer() async {
@@ -46,6 +52,7 @@ class _IRadioState extends State<IRadio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _appBar(),
       body: _body(),
     );
@@ -126,11 +133,15 @@ class _IRadioState extends State<IRadio> {
                     ? 'Vol ${_volumeValue.ceil().toString()} %'
                     : '',
                 style: TextStyle(
-                    fontSize: 13.5, fontWeight: FontWeight.bold, color: KColors.kPrimaryColor),
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.bold,
+                    color: KColors.kPrimaryColor),
               ),
             )),
         Positioned(
           top: MediaQuery.of(context).size.height * .06,
+          left: 0,
+          right: 0,
           child: SfRadialGauge(
             axes: <RadialAxis>[
               RadialAxis(
@@ -186,9 +197,9 @@ class _IRadioState extends State<IRadio> {
           ),
         ),
         Positioned(
-          top: MediaQuery.of(context).size.height * .25,
+          top: MediaQuery.of(context).size.height * .27,
           right: 0,
-          left: -8,
+          left: 0,
           child: PlayerBuilder.isBuffering(
               player: _assetsAudioPlayer,
               builder: (BuildContext context, bool isbuffering) {
@@ -212,11 +223,11 @@ class _IRadioState extends State<IRadio> {
               color: KColors.kLightColor,
               child: Center(
                   child: Marquee(
-                    text: 'Some custom description for current show here',
-                    style: TextStyle(fontSize: 14),
-                    blankSpace: 200,
-                    velocity: 30,
-                  )),
+                text: 'Some custom description for current show here',
+                style: TextStyle(fontSize: 14),
+                blankSpace: 200,
+                velocity: 30,
+              )),
             ))
       ],
     );
@@ -246,7 +257,8 @@ class _IRadioState extends State<IRadio> {
             onTap: () => _assetsAudioPlayer.playOrPause(),
             child: Icon(Icons.pause_rounded,
                 size: 50, color: KColors.kPrimaryColor)),
-        Text('PAUSE', style: TextStyle(color: KColors.kPrimaryColor, fontSize: 12))
+        Text('PAUSE',
+            style: TextStyle(color: KColors.kPrimaryColor, fontSize: 12))
       ],
     );
   }
@@ -257,12 +269,81 @@ class _IRadioState extends State<IRadio> {
       children: [
         CircularProgressIndicator(color: KColors.kPrimaryColor, strokeWidth: 2),
         const SizedBox(height: 15),
-        Text('BUFFERING', style: TextStyle(color: KColors.kPrimaryColor, fontSize: 12))
+        Text('BUFFERING',
+            style: TextStyle(color: KColors.kPrimaryColor, fontSize: 12))
       ],
     );
   }
 
   Widget _schedule() {
-    return Center(child: Text('Schedule'));
+    return FutureBuilder(
+        future: myFuture,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            dynamic data = snapshot.data;
+            return ListView(
+              children: (data as Map).entries.map((entry) {
+                return Column(
+                  children: [
+                    GFAccordion(
+                      margin: EdgeInsets.all(0),
+                        titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        expandedTitleBackgroundColor: Colors.white,
+                        titleChild: Text(entry.key,
+                            style: TextStyle(
+                                color: KColors.kPrimaryColor, fontSize: 22)),
+                        collapsedIcon: Icon(Icons.add_circle_outline_outlined,
+                            color: KColors.kPrimaryColor, size: 26),
+                        expandedIcon: Icon(Icons.remove_circle_outline,
+                            color: KColors.kPrimaryColor, size: 26),
+                        contentChild: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: (entry.value as List).isEmpty
+                              ? Text('No programmes for this day')
+                              : Column(
+                            children: (entry.value as List).map((programme) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(programme['title'],
+                                              style: TextStyle(fontSize: 18)),
+                                          Text(programme['time'])
+                                        ],
+                                      )),
+                                  const SizedBox(width: 24),
+                                  Column(
+                                    children: [
+                                      Switch.adaptive(
+                                          value: false, onChanged: (val) {}),
+                                      Text('Remind me', style: TextStyle(color: KColors.kPrimaryColor))
+                                    ],
+                                  )
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        )),
+                    const Divider()
+                  ],
+                );
+              }).toList(),
+            );
+          }
+
+          if (snapshot.hasError) {
+            return const Center(
+                child: Text('An error occured getting Radio Schedule',
+                    style: TextStyle(fontSize: 22)));
+          }
+
+          return Center(
+            child: Lottie.asset('assets/lottie/loader.json'),
+          );
+        });
   }
 }

@@ -44,11 +44,11 @@ class _SocialState extends State<Social> {
     return AppBar(
         elevation: 0,
         automaticallyImplyLeading: true,
-        foregroundColor: KColors.kTextColorLight,
+        foregroundColor: Colors.white,
         backgroundColor: KColors.kPrimaryColor,
         title: const Text(
           'Social',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ));
   }
 
@@ -58,9 +58,19 @@ class _SocialState extends State<Social> {
       child: Column(
         children: [
           Container(
-            height: 80,
+            height: MediaQuery.of(context).size.height * .25,
             alignment: Alignment.center,
-            child: const Text('Like/Follow PAM on', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+            decoration: BoxDecoration(
+              color: Colors.black45,
+              image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                      Colors.black45.withOpacity(.95),
+                      BlendMode.saturation),
+                image: const AssetImage('assets/images/social_image_new.png'),
+                fit: BoxFit.fitWidth
+              )
+            ),
+            child: const Text('Like/Follow PAM on', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600)),
           ),
           ListView.builder(
             shrinkWrap: true,

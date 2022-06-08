@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/src/components/drawer.dart';
 import 'package:pamm2/src/pages/Give.dart';
 
 class GiveAnnex extends Give {
@@ -10,14 +10,12 @@ class GiveAnnex extends Give {
   PreferredSizeWidget appBar() {
     // TODO: implement appBar
     return AppBar(
-      automaticallyImplyLeading: true,
-      backgroundColor: KColors.kPrimaryColor,
-      elevation: 0,
-      title: Builder(
-        builder: (BuildContext context) {
-          return const Text('Give', style: TextStyle(fontSize: 18),);
-        },
-      ),
-    );
+        elevation: 0,
+        systemOverlayStyle:
+        SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
+        automaticallyImplyLeading: true,
+        foregroundColor: KColors.kLightColor,
+        backgroundColor: KColors.kPrimaryColor,
+        title: Text('Give'));
   }
 }

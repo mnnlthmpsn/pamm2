@@ -37,6 +37,9 @@ dependencies:
   cached_network_image: ^3.2.0
   country_picker: ^2.0.12
   syncfusion_flutter_gauges: ^20.1.48
+  get:
+  badges:
+  geolocator:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,6 +47,7 @@ dependencies:
   assets_audio_player: ^3.0.4+1
   marquee:
   url_launcher:
+  getwidget:
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +74,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/lottie/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

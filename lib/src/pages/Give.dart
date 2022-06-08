@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pamm2/src/components/drawer.dart';
 import 'package:pamm2/src/components/paymentStepper/paymentStepper.dart';
+import 'package:pamm2/src/components/webViewBuilder.dart';
 
 class Give extends StatelessWidget {
   const Give({Key? key}) : super(key: key);
@@ -9,10 +10,7 @@ class Give extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: const Padding(
-        padding: EdgeInsets.only(bottom: 30, left: 10, right: 10),
-        child: PaymentStepper(),
-      ),
+      body: const WebViewBuilder(url: 'https://pama.vercel.app/give')
     );
   }
 

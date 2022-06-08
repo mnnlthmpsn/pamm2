@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -45,10 +46,7 @@ class _WebViewBuilderState extends State<WebViewBuilder> {
         ),
         if (loadingPercentage < 100)
           Center(
-            child: CircularProgressIndicator(
-              color: KColors.kPrimaryColor,
-              strokeWidth: 2,
-            ),
+            child: Lottie.asset('assets/lottie/loader.json'),
           )
       ],
     );
