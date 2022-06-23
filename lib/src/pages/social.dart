@@ -10,6 +10,7 @@ class Social extends StatefulWidget {
     { 'title': 'Twitter', 'image': 'assets/icons/twitter.png', 'link': 'https://twitter.com/revasantemensah' },
     { 'title': 'Instagram', 'image': 'assets/icons/instagram.png', 'link': 'https://www.instagram.com/prophetasantemensah/' },
     { 'title': 'Youtube', 'image': 'assets/icons/youtube.png', 'link': 'https://www.youtube.com/channel/UCCawkgDRQGkkuOq9iMq75XQ' },
+    { 'title': 'Tiktok', 'image': 'assets/icons/tiktok.png', 'link': 'https://www.tiktok.com/@chrisasanteministries' }
   ];
 
   @override
@@ -58,19 +59,10 @@ class _SocialState extends State<Social> {
       child: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * .25,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.black45,
-              image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black45.withOpacity(.95),
-                      BlendMode.saturation),
-                image: const AssetImage('assets/images/social_image_new.png'),
-                fit: BoxFit.fitWidth
-              )
-            ),
-            child: const Text('Like/Follow PAM on', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600)),
+            color: Colors.red,
+            height: MediaQuery.of(context).size.height * .35,
+            width: double.infinity,
+            child: Image.asset('assets/images/social_med.jpg', fit: BoxFit.cover, alignment: Alignment.center)
           ),
           ListView.builder(
             shrinkWrap: true,
@@ -100,7 +92,7 @@ class _SocialState extends State<Social> {
                         SizedBox(width: MediaQuery.of(context).size.width * .3),
                         Image.asset(Social.socialLinks[i]['image']!, height: 40),
                         const SizedBox(width: 16),
-                        Text(Social.socialLinks[i]['title']!, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)
+                        Text(Social.socialLinks[i]['title']!, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)
                       ],
                     )
                 ),
@@ -121,7 +113,8 @@ class _SocialState extends State<Social> {
               const SizedBox(width: 30),
               const Icon(Icons.share, size: 30,)
             ],
-          )
+          ),
+          const SizedBox(height: 30)
         ],
       ),
     );

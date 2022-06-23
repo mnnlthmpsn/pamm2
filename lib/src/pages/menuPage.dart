@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/helpers.dart';
@@ -131,6 +131,26 @@ class _MenuPageState extends State<MenuPage> {
         'route': 'social',
         'image': true
       }
+    ],
+    [
+      {
+        'title': 'Prayer',
+        'icon': const FaIcon(FontAwesomeIcons.handsPraying),
+        'route': 'prayer',
+        'image': true
+      },
+      {
+        'title': 'Events',
+        'icon': Icons.calendar_today_rounded,
+        'route': 'events_2',
+        'image': false
+      },
+      {
+        'title': 'Contact',
+        'icon': Icons.mail_rounded,
+        'route': 'contact',
+        'image': false
+      }
     ]
   ];
 
@@ -162,7 +182,7 @@ class _MenuPageState extends State<MenuPage> {
               left: 0,
               bottom: MediaQuery.of(context).size.height * .12,
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * .45,
+                  height: MediaQuery.of(context).size.height * .58,
                   child: _menuItems())),
         ],
       ),
@@ -191,6 +211,11 @@ class _MenuPageState extends State<MenuPage> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(3, (index) => _menuCard(2, index))),
+          ),
+          Expanded(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(3, (index) => _menuCard(3, index))),
           )
         ],
       ),

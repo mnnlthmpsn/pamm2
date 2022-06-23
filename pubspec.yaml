@@ -48,6 +48,7 @@ dependencies:
   marquee:
   url_launcher:
   getwidget:
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_test:
