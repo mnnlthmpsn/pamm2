@@ -18,7 +18,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
 
   void continueAsGuest() {
-    print('Continue as guest');
+    newPageDestroyPrevious(context, 'home');
   }
 
   void login() {
@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const <Widget>[
-            Text('PAMM',
+            Text('CAM',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             Text('Ministries',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))

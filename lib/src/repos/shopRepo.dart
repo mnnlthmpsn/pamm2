@@ -1,31 +1,29 @@
 import 'dart:convert';
-
-import 'package:pamm2/src/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:pamm2/src/models/product_detail.dart';
 
 class ShopRepo {
-  Future<List<Product>> getProducts() async {
+  Future<List> getProducts() async {
     try {
-      Uri url = Uri.parse('http://198.199.87.131:7018/products');
+      Uri url = Uri.parse(
+          'https://pama-api.herokuapp.com/api/products?fields=title,price&populate[category][fields][0]=title&populate[images][fields][0]=url');
       dynamic res = await http.get(url);
       dynamic resBody = jsonDecode(res.body);
 
-      return (resBody['products'] as List)
-          .map((prod) => Product.fromJson(prod))
-          .toList();
+      return resBody['data'];
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<ProductDetail> getProduct(String productId) async {
+  Future getProduct(String productId) async {
     try {
-      Uri url = Uri.parse('http://198.199.87.131:7018/products/$productId');
+      Uri url =
+          Uri.parse('https://pama-api.herokuapp.com/api/products/$productId?fields=title,price,in_stock,description&populate[images][fields][0]=url&populate[category][fields][0]=title');
       dynamic res = await http.get(url);
       dynamic resBody = jsonDecode(res.body);
-
-      return ProductDetail.fromJson(resBody['product']);
+      print(resBody['data']);
+      return resBody['data'];
     } catch (e) {
       rethrow;
     }

@@ -5,7 +5,8 @@ import 'package:pamm2/src/components/kButton.dart';
 import 'package:pamm2/src/components/kFormField.dart';
 
 class Prayer extends StatefulWidget {
-  const Prayer({Key? key}) : super(key: key);
+  final String? src;
+  const Prayer({Key? key, this.src}) : super(key: key);
 
   @override
   State<Prayer> createState() => _PrayerState();
@@ -18,8 +19,8 @@ class _PrayerState extends State<Prayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
-      body: _body(),
+      appBar: widget.src == null ? appBar() : inVincible(),
+      body: _body(context),
     );
   }
 
@@ -34,7 +35,13 @@ class _PrayerState extends State<Prayer> {
     );
   }
 
-  Widget _body() {
+  PreferredSizeWidget inVincible() {
+    return AppBar(
+      toolbarHeight: 0,
+    );
+  }
+
+  Widget _body(context) {
     return CustomScrollView(
       slivers: [
         SliverList(
@@ -42,7 +49,7 @@ class _PrayerState extends State<Prayer> {
             Image.asset('assets/images/prayer.jpg'),
             SizedBox(height: MediaQuery.of(context).size.height * .05),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).size.height * .2),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

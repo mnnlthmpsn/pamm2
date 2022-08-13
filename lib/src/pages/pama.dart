@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/src/components/drawer.dart';
 import 'package:pamm2/src/components/webViewBuilder.dart';
 
 class PAMA extends StatelessWidget {

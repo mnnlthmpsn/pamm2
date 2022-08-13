@@ -223,9 +223,9 @@ class _IRadioState extends State<IRadio> {
               color: KColors.kLightColor,
               child: Center(
                   child: Marquee(
-                text: 'Some custom description for current show here',
+                text: 'Welcome to CAM iRadio',
                 style: TextStyle(fontSize: 14),
-                blankSpace: 200,
+                blankSpace: 80,
                 velocity: 30,
               )),
             ))
@@ -281,58 +281,76 @@ class _IRadioState extends State<IRadio> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            dynamic data = snapshot.data;
-            return ListView(
-              children: (data as Map).entries.map((entry) {
-                return Column(
-                  children: [
-                    GFAccordion(
-                      margin: EdgeInsets.all(0),
-                        titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                        expandedTitleBackgroundColor: Colors.white,
-                        titleChild: Text(entry.key,
-                            style: TextStyle(
-                                color: KColors.kPrimaryColor, fontSize: 22)),
-                        collapsedIcon: Icon(Icons.add_circle_outline_outlined,
-                            color: KColors.kPrimaryColor, size: 26),
-                        expandedIcon: Icon(Icons.remove_circle_outline,
-                            color: KColors.kPrimaryColor, size: 26),
-                        contentChild: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: (entry.value as List).isEmpty
-                              ? Text('No programmes for this day')
-                              : Column(
-                            children: (entry.value as List).map((programme) {
-                              return Row(
-                                children: [
-                                  Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+            dynamic programmes = snapshot.data;
+            return ListView.builder(
+                itemCount: programmes.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return Column(
+                    children: [
+                      GFAccordion(
+                          margin: EdgeInsets.all(0),
+                          titlePadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 14),
+                          expandedTitleBackgroundColor: Colors.white,
+                          titleChild: Text(
+                              programmes[i]['attributes']['title']!,
+                              style: TextStyle(
+                                  color: KColors.kPrimaryColor, fontSize: 22)),
+                          collapsedIcon: Icon(Icons.add_circle_outline_outlined,
+                              color: KColors.kPrimaryColor, size: 26),
+                          expandedIcon: Icon(Icons.remove_circle_outline,
+                              color: KColors.kPrimaryColor, size: 26),
+                          contentChild: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: programmes.isEmpty
+                                ? Text('No programmes for this day')
+                                : ListView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: programmes[i]['attributes']
+                                            ['programmes']['data']
+                                        .length,
+                                    itemBuilder: (BuildContext context, int j) {
+                                      return Row(
                                         children: [
-                                          Text(programme['title'],
-                                              style: TextStyle(fontSize: 18)),
-                                          Text(programme['time'])
+                                          Expanded(
+                                              child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  programmes[i]['attributes']
+                                                              ['programmes']
+                                                          ['data'][j]
+                                                      ['attributes']['title']!,
+                                                  style:
+                                                      TextStyle(fontSize: 18)),
+                                              Text(programmes[i]['attributes']
+                                                          ['programmes']['data']
+                                                      [j]['attributes']['time']
+                                                  .toString())
+                                            ],
+                                          )),
+                                          const SizedBox(width: 24),
+                                          Column(
+                                            children: [
+                                              Switch.adaptive(
+                                                  value: false,
+                                                  onChanged: (val) {}),
+                                              Text('Remind me',
+                                                  style: TextStyle(
+                                                      color: KColors
+                                                          .kPrimaryColor))
+                                            ],
+                                          )
                                         ],
-                                      )),
-                                  const SizedBox(width: 24),
-                                  Column(
-                                    children: [
-                                      Switch.adaptive(
-                                          value: false, onChanged: (val) {}),
-                                      Text('Remind me', style: TextStyle(color: KColors.kPrimaryColor))
-                                    ],
-                                  )
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        )),
-                    const Divider()
-                  ],
-                );
-              }).toList(),
-            );
+                                      );
+                                    }),
+                          )),
+                      const Divider()
+                    ],
+                  );
+                });
           }
 
           if (snapshot.hasError) {

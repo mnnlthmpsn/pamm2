@@ -6,7 +6,7 @@ import 'package:pamm2/config.dart';
 import 'package:pamm2/src/components/kButton.dart';
 import 'package:pamm2/src/components/kFormField.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
-import 'package:geolocator/geolocator.dart';
+
 
 class Billing extends StatefulWidget {
   const Billing({Key? key}) : super(key: key);
@@ -27,8 +27,8 @@ class _BillingState extends State<Billing> {
 
    for (var element in cartController.cartItems) {
       int qty = int.parse(element['qty']);
-      double unit_price = element['product'].amount;
-      double unit_total = qty * unit_price;
+      dynamic unit_price = element['product']['price'];
+      dynamic unit_total = qty * unit_price;
 
       setState(() {
         total += unit_total;
@@ -82,7 +82,7 @@ class _BillingState extends State<Billing> {
                                 height: 80,
                                 width: 80,
                                 child: CachedNetworkImage(
-                                    imageUrl: cartItem['product'].images[0],
+                                    imageUrl: cartItem['product']['images']['data'][0]['attributes']['url'],
                                     placeholder:
                                         (BuildContext context, String url) {
                                       return const Icon(Icons.shopping_cart,
@@ -94,11 +94,11 @@ class _BillingState extends State<Billing> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(cartItem['product'].title),
+                                  Text(cartItem['product']['title']),
                                   Text(
-                                      'Amount: ${cartItem['qty']} x GHS ${cartItem['product'].amount}'),
+                                      'Amount: ${cartItem['qty']} x GHS ${cartItem['product']['price']}'),
                                   Text(
-                                      'Total: GHS ${double.parse(cartItem['qty']) * cartItem['product'].amount}'),
+                                      'Total: GHS ${double.parse(cartItem['qty']) * cartItem['product']['price']}'),
                                 ],
                               )
                             ],
@@ -108,7 +108,10 @@ class _BillingState extends State<Billing> {
                               top: 0,
                               bottom: 0,
                               child: IconButton(
-                                  onPressed: () {}, icon: Icon(Icons.close)))
+                                  onPressed: () {
+                                    cartController.removeFromCart(cartItem);
+                                    setState(() {});
+                                  }, icon: Icon(Icons.close)))
                         ],
                       ),
                     );

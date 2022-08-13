@@ -50,7 +50,7 @@ class _MenuPageState extends State<MenuPage> {
   List menus = [
     [
       {
-        'title': 'PAMM TV',
+        'title': 'CAM TV',
         'icon': Image.asset(
           'assets/icons/tv.png',
           width: 35,
@@ -106,7 +106,7 @@ class _MenuPageState extends State<MenuPage> {
     ],
     [
       {
-        'title': 'PAMA',
+        'title': 'CAMA',
         'icon': Icons.group_add_rounded,
         'route': 'pama',
         'image': false
@@ -132,26 +132,26 @@ class _MenuPageState extends State<MenuPage> {
         'image': true
       }
     ],
-    [
-      {
-        'title': 'Prayer',
-        'icon': const FaIcon(FontAwesomeIcons.handsPraying),
-        'route': 'prayer',
-        'image': true
-      },
-      {
-        'title': 'Events',
-        'icon': Icons.calendar_today_rounded,
-        'route': 'events_2',
-        'image': false
-      },
-      {
-        'title': 'Contact',
-        'icon': Icons.mail_rounded,
-        'route': 'contact',
-        'image': false
-      }
-    ]
+    // [
+    //   {
+    //     'title': 'Prayer',
+    //     'icon': const FaIcon(FontAwesomeIcons.handsPraying),
+    //     'route': 'prayer',
+    //     'image': true
+    //   },
+    //   {
+    //     'title': 'Events',
+    //     'icon': Icons.calendar_today_rounded,
+    //     'route': 'events_2',
+    //     'image': false
+    //   },
+    //   {
+    //     'title': 'Contact',
+    //     'icon': Icons.mail_rounded,
+    //     'route': 'contact',
+    //     'image': false
+    //   }
+    // ]
   ];
 
   @override
@@ -159,20 +159,32 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: IconButton(
-          color: KColors.kDarkColor,
-          icon: const Icon(
-            Icons.menu,
-            size: 30,
-          ),
-          onPressed: () {
-            widget.scaffoldKey.currentState!.openDrawer();
-          },
-        )
-      ),
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                color: KColors.kDarkColor,
+                icon: const Icon(
+                  Icons.menu,
+                  size: 30,
+                ),
+                onPressed: () {
+                  widget.scaffoldKey.currentState!.openDrawer();
+                },
+              ),
+              IconButton(
+                color: KColors.kDarkColor,
+                icon: const Icon(
+                  Icons.share_rounded,
+                  size: 30,
+                ),
+                onPressed: () {},
+              )
+            ],
+          )),
       backgroundColor: KColors.kLightColor,
       body: Stack(
         children: [
@@ -182,7 +194,7 @@ class _MenuPageState extends State<MenuPage> {
               left: 0,
               bottom: MediaQuery.of(context).size.height * .12,
               child: SizedBox(
-                  height: MediaQuery.of(context).size.height * .58,
+                  height: MediaQuery.of(context).size.height * .45,
                   child: _menuItems())),
         ],
       ),
@@ -212,11 +224,11 @@ class _MenuPageState extends State<MenuPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(3, (index) => _menuCard(2, index))),
           ),
-          Expanded(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(3, (index) => _menuCard(3, index))),
-          )
+          // Expanded(
+          //   child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: List.generate(3, (index) => _menuCard(3, index))),
+          // )
         ],
       ),
     );

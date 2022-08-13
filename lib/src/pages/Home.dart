@@ -1,26 +1,24 @@
-import 'package:badges/badges.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/helpers.dart';
 import 'package:pamm2/src/components/drawer.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
-import 'package:pamm2/src/pages/Give.dart';
 import 'package:pamm2/src/pages/drawer/contact.dart';
-import 'package:pamm2/src/pages/eStore.dart';
+import 'package:pamm2/src/pages/drawer/prayer.dart';
+import 'package:pamm2/src/pages/events.dart';
 import 'package:pamm2/src/pages/menuPage.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   static const List menuItems = [
-    {'title': 'Home', 'icon': Icons.home_rounded},
-    {'title': 'Give', 'icon': Icons.favorite_rounded},
-    {'title': 'eStore', 'icon': Icons.shopping_cart_rounded},
-    {'title': 'More', 'icon': Icons.menu_rounded},
+    {'title': 'Home', 'icon': FontAwesomeIcons.house, 'type': 'icon'},
+    {'title': 'Prayer', 'icon': 'assets/icons/pray_noline.png', 'type': 'image'},
+    {'title': 'Events', 'icon': 'assets/icons/event_large.png', 'type': 'image'},
+    {'title': 'Contact', 'icon': 'assets/icons/call_us_large.png', 'type': 'image'},
   ];
 
   @override
@@ -39,13 +37,10 @@ class _HomeState extends State<Home> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 10.0),
-            child: Icon(
-              item['icon'],
-              size: 30,
-              color:
-                  activeIndex == index ? Colors.white : KColors.kPrimaryColor,
-            ),
+            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 12.0, bottom: 2),
+            child: item['type'] == 'icon'
+              ? FaIcon(item['icon'],size: 30, color: activeIndex == index ? Colors.white : KColors.kPrimaryColor)
+              : Image.asset(item['icon'], color: activeIndex == index ? Colors.white : KColors.kPrimaryColor, height: 30),
           ),
           index == activeIndex
               ? const SizedBox.shrink()
@@ -53,7 +48,7 @@ class _HomeState extends State<Home> {
                   item['title'],
                   style: TextStyle(
                       color: KColors.kPrimaryColor,
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold),
                 )
         ],
@@ -65,8 +60,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     List pages = [
       MenuPage(scaffoldKey: scaffoldKey),
-      const Give(),
-      const Store(),
+      const Prayer(src: 'home'),
+      const Events(src: 'home'),
       const Contact(src: 'home'),
     ];
 
@@ -94,19 +89,6 @@ class _HomeState extends State<Home> {
                   color: KColors.kLightColor,
                   fontWeight: FontWeight.bold),
             ),
-            activeIndex == 2
-                ? IconButton(
-                onPressed: () => newPage(context, 'billing'),
-                icon: GetBuilder<CartController>(builder: (cartController) {
-                  return Badge(
-                      child: const Icon(Icons.shopping_cart),
-                      badgeColor: KColors.kLightColor,
-                      badgeContent: Text(
-                        cartController.getCartLength(),
-                        style: TextStyle(color: KColors.kPrimaryColor),
-                      ));
-                }))
-                : const SizedBox.shrink()
           ],
         ),
       ),

@@ -6,13 +6,12 @@ import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/src/components/kFormField.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
 import 'package:pamm2/src/models/product_detail.dart';
 import 'package:pamm2/src/repos/shopRepo.dart';
 
 class ItemDetails extends StatefulWidget {
-  final String productId;
+  final int productId;
 
   const ItemDetails({Key? key, required this.productId}) : super(key: key);
 
@@ -25,7 +24,7 @@ class ItemDetails extends StatefulWidget {
 class _ItemDetailsState extends State<ItemDetails> {
   final TextEditingController _qtyController = TextEditingController(text: '1');
   final ShopRepo shopRepo = ShopRepo();
-  late final Future<ProductDetail> myFuture;
+  late final Future myFuture;
 
   int currentIndex = 0;
 
@@ -35,7 +34,7 @@ class _ItemDetailsState extends State<ItemDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    myFuture = shopRepo.getProduct(widget.productId);
+    myFuture = shopRepo.getProduct(widget.productId.toString());
   }
 
   @override
@@ -61,7 +60,7 @@ class _ItemDetailsState extends State<ItemDetails> {
               border: Border.all(color: Colors.grey, width: .5),
               borderRadius: BorderRadius.circular(3)),
           child: CachedNetworkImage(
-              imageUrl: thumbnail,
+              imageUrl: thumbnail['attributes']['url'],
               placeholder: (BuildContext context, String url) {
                 return const Icon(Icons.shopping_cart, size: 30);
               },
@@ -71,12 +70,12 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  Widget _imageGallery(context, List<String> images) {
+  Widget _imageGallery(context, List images) {
     return Column(
       children: [
         Center(
           child: CachedNetworkImage(
-              imageUrl: images[currentIndex],
+              imageUrl: images[currentIndex]['attributes']['url'],
               placeholder: (BuildContext context, String url) {
                 return const Icon(Icons.shopping_cart, size: 30);
               },
@@ -92,14 +91,14 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  Widget _productDetails(ProductDetail product) {
+  Widget _productDetails(dynamic product) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 40),
-          Text(product.title!, style: TextStyle(fontSize: 20)),
+          Text(product['title']!, style: TextStyle(fontSize: 20)),
           const SizedBox(height: 10),
-          Text('GHS ${product.amount.toString()}',
+          Text('GHS ${product['price'].toString()}',
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 18),
@@ -107,17 +106,17 @@ class _ItemDetailsState extends State<ItemDetails> {
             children: <Widget>[
               const Text('Availability: '),
               Text(
-                product.inStock! ? 'In stock' : 'Out of Stock',
-                style: const TextStyle(color: Colors.green),
+                product['in_stock'] == true ? 'In stock' : 'Out of Stock',
+                style: TextStyle(color: product['in_stock'] == true ? Colors.green : Colors.red),
               )
             ],
           ),
           const SizedBox(height: 10),
-          Text(product.description!),
+          Text(product['description']),
         ]);
   }
 
-  Widget _callToAction(context, ProductDetail product) {
+  Widget _callToAction(context, product) {
     return Row(
       children: [
         SizedBox(
@@ -154,12 +153,12 @@ class _ItemDetailsState extends State<ItemDetails> {
   }
 
   Widget _body() {
-    return FutureBuilder<ProductDetail>(
+    return FutureBuilder(
         future: myFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            ProductDetail product = snapshot.data;
+            dynamic product = snapshot.data;
 
             return Builder(builder: (BuildContext context) {
               return (SingleChildScrollView(
@@ -169,12 +168,12 @@ class _ItemDetailsState extends State<ItemDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 50),
-                    _imageGallery(context, product.images!),
-                    _productDetails(product),
+                    _imageGallery(context, product['attributes']['images']['data']!),
+                    _productDetails(product['attributes']),
                     const SizedBox(height: 18),
-                    _callToAction(context, product),
+                    _callToAction(context, product['attributes']),
                     const SizedBox(height: 50),
-                    product.careGuideInfo != null
+                    product['attributes']['care_guide_info'] != null
                         ? _careInformation(product.careGuideInfo!)
                         : const SizedBox.shrink(),
                   ],
@@ -183,7 +182,7 @@ class _ItemDetailsState extends State<ItemDetails> {
             });
           }
           if (snapshot.hasError) {
-            return const Center(child: Text('Check internet connection'));
+            return const Center(child: Text('Sorry an error occured'));
           }
           return Center(
             child: Lottie.asset('assets/lottie/loader.json'),

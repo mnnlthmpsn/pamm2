@@ -2,32 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
-import 'package:pamm2/src/models/product.dart';
 import 'package:pamm2/src/pages/itemDetails.dart';
 import 'package:pamm2/src/repos/shopRepo.dart';
-
-List items = [
-  {
-    'title': 'Respect the Prophets',
-    'img':
-        'https://images.unsplash.com/photo-1648737154448-ccf0cafae1c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60'
-  },
-  {
-    'title': 'Respect the Prophets',
-    'img':
-        'https://images.unsplash.com/photo-1648737965255-e1e6f33f0937?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxMXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-  },
-  {
-    'title': 'Respect the Prophets',
-    'img':
-        'https://images.unsplash.com/photo-1652538302725-0ee98032dcad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-  },
-  {
-    'title': 'Respect the Prophets',
-    'img':
-        'https://images.unsplash.com/photo-1652551161938-bb90715aeaa3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyMHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-  },
-];
 
 class Store extends StatefulWidget {
   const Store({Key? key}) : super(key: key);
@@ -55,7 +31,7 @@ class _StoreState extends State<Store> {
     );
   }
 
-  Widget _itemCard(Product product) {
+  Widget _itemCard(dynamic product) {
     return Builder(builder: (BuildContext context) {
       return Container(
         padding:
@@ -71,7 +47,7 @@ class _StoreState extends State<Store> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: CachedNetworkImage(
-                    imageUrl: product.images![0],
+                    imageUrl: product['attributes']['images']!['data'][0]['attributes']['url'],
                     placeholder: (BuildContext context, String url) {
                       return const Icon(Icons.shopping_cart, size: 30);
                     },
@@ -80,10 +56,10 @@ class _StoreState extends State<Store> {
               ),
               Column(
                 children: [
-                  Text(product.category!.title!,
+                  Text(product['attributes']!['category']!['data']['attributes']['title'],
                       style: const TextStyle(fontSize: 12)),
                   Text(
-                    product.title!,
+                    product['attributes']['title']!,
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 25),
@@ -96,7 +72,7 @@ class _StoreState extends State<Store> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) => ItemDetails(
-                                    productId: product.id!,
+                                    productId: product['id']!,
                                   ))),
                       child: const Padding(
                           padding: EdgeInsets.symmetric(
@@ -114,16 +90,15 @@ class _StoreState extends State<Store> {
   }
 
   Widget _body() {
-    return FutureBuilder<List<Product>>(
+    return FutureBuilder<List>(
         future: shopRepo.getProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error);
-            return Center(child: Text(snapshot.error.toString()));
+            return Center(child: Text('Sorry an error occured. Try again later'));
           }
 
           if (snapshot.hasData) {
-            List<Product> products = snapshot.data;
+            List products = snapshot.data;
 
             return Container(
               decoration: BoxDecoration(color: KColors.kTextColorDark),

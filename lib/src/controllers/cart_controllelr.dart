@@ -18,5 +18,10 @@ class CartController extends GetxController {
     update();
   }
 
+  void removeFromCart(dynamic cartItem) {
+    _cartItems.remove(cartItem);
+    update();
+  }
+
   String getCartLength () => cartItems.length.toString();
 }

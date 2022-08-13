@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pamm2">
+    package="com.cam.app">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -20,7 +20,7 @@
         <!-- If your sends SMS messages -->
         <intent>
             <action android:name="android.intent.action.SENDTO" />
-            <data android:scheme="smsto" />
+            <data android:scheme="sms" />
         </intent>
         <!-- If your app sends emails -->
         <intent>
