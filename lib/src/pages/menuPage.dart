@@ -175,13 +175,24 @@ class _MenuPageState extends State<MenuPage> {
                   widget.scaffoldKey.currentState!.openDrawer();
                 },
               ),
-              IconButton(
-                color: KColors.kDarkColor,
-                icon: const Icon(
-                  Icons.share_rounded,
-                  size: 30,
+              Container(
+                alignment: Alignment.center,
+                width: 28,
+                height: 28,
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  border: Border.all(color: KColors.kDarkColor),
+                  borderRadius: BorderRadius.circular(50)
                 ),
-                onPressed: () {},
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  color: KColors.kDarkColor,
+                  icon: const Icon(
+                    Icons.share_rounded,
+                    size: 16,
+                  ),
+                  onPressed: () {},
+                ),
               )
             ],
           )),

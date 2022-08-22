@@ -34,7 +34,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
     return AppBar(
         elevation: 0,
         systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
+            SystemUiOverlayStyle(statusBarColor: KColors.kDarkColor),
         automaticallyImplyLeading: true,
         foregroundColor: KColors.kLightColor,
         backgroundColor: KColors.kPrimaryColor,

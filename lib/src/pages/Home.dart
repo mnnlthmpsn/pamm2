@@ -37,10 +37,10 @@ class _HomeState extends State<Home> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 12.0, bottom: 2),
+            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 18.0, bottom: 2),
             child: item['type'] == 'icon'
-              ? FaIcon(item['icon'],size: 30, color: activeIndex == index ? Colors.white : KColors.kPrimaryColor)
-              : Image.asset(item['icon'], color: activeIndex == index ? Colors.white : KColors.kPrimaryColor, height: 30),
+              ? FaIcon(item['icon'], size: 18, color: activeIndex == index ? Colors.white : KColors.kPrimaryColor)
+              : Image.asset(item['icon'], color: activeIndex == index ? Colors.white : KColors.kPrimaryColor, height: 20),
           ),
           index == activeIndex
               ? const SizedBox.shrink()
@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
+            SystemUiOverlayStyle(statusBarColor: KColors.kDarkColor),
         automaticallyImplyLeading: false,
         toolbarHeight: activeIndex == 0 ? 0 : 56,
         backgroundColor:

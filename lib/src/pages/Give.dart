@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pamm2/src/components/drawer.dart';
-import 'package:pamm2/src/components/paymentStepper/paymentStepper.dart';
 import 'package:pamm2/src/components/webViewBuilder.dart';
 
 class Give extends StatelessWidget {
