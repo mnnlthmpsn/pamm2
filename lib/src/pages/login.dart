@@ -138,11 +138,11 @@ class _LoginState extends State<Login> {
   }
 
   Widget _emailField() {
-    return const KFormField(label: 'Email', icon: Icons.alternate_email,);
+    return KFormField(label: 'Email', icon: Icons.alternate_email, controller: _emailController,);
   }
 
   Widget _passwordField() {
-    return const KFormField(label: 'Password', icon: Icons.lock);
+    return KFormField(label: 'Password', icon: Icons.lock, controller: _passwordController,);
   }
 
   Widget _passwordReset() {

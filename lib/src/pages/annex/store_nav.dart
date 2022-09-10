@@ -34,7 +34,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
     return AppBar(
         elevation: 0,
         systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: KColors.kDarkColor),
+            SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
         automaticallyImplyLeading: true,
         foregroundColor: KColors.kLightColor,
         backgroundColor: KColors.kPrimaryColor,
@@ -42,7 +42,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'eStore',
+              'STORE',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

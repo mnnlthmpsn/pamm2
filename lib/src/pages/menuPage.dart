@@ -165,6 +165,7 @@ class _MenuPageState extends State<MenuPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Image.asset('assets/images/logo.png', height: 40,),
               IconButton(
                 color: KColors.kDarkColor,
                 icon: const Icon(
@@ -174,25 +175,6 @@ class _MenuPageState extends State<MenuPage> {
                 onPressed: () {
                   widget.scaffoldKey.currentState!.openDrawer();
                 },
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: 28,
-                height: 28,
-                padding: EdgeInsets.zero,
-                decoration: BoxDecoration(
-                  border: Border.all(color: KColors.kDarkColor),
-                  borderRadius: BorderRadius.circular(50)
-                ),
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  color: KColors.kDarkColor,
-                  icon: const Icon(
-                    Icons.share_rounded,
-                    size: 16,
-                  ),
-                  onPressed: () {},
-                ),
               )
             ],
           )),
@@ -303,7 +285,8 @@ class _MenuPageState extends State<MenuPage> {
           children: [
             Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * .01),
+                  top: MediaQuery.of(context).size.height * .02,
+              ),
               height: double.infinity,
               width: double.infinity,
               child: Image.asset(

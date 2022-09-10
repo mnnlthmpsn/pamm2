@@ -28,4 +28,58 @@ class ShopRepo {
       rethrow;
     }
   }
+
+  Future createOrder(payload) async {
+    try {
+      Uri url = Uri.parse(
+          'https://pama-api.herokuapp.com/api/orders');
+      Uri url_test = Uri.parse(
+          'http://10.0.2.2:1337/api/orders');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 200) {
+        dynamic resBody = jsonDecode(response.body);
+        return resBody['data'];
+      }
+      else {
+        print(response.statusCode);
+        print(response.body);
+        throw Exception("Error making payment");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future makePayment(payload) async {
+    try {
+      Uri url = Uri.parse(
+          'https://pama-api.herokuapp.com/api/payment');
+      Uri url_test = Uri.parse(
+          'http://10.0.2.2:1337/api/payment');
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode == 200) {
+        dynamic resBody = jsonDecode(response.body);
+        return resBody['data'];
+      }
+      else {
+        throw Exception("Error making payment");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

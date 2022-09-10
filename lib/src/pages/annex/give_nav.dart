@@ -16,6 +16,6 @@ class GiveAnnex extends Give {
         automaticallyImplyLeading: true,
         foregroundColor: KColors.kLightColor,
         backgroundColor: KColors.kPrimaryColor,
-        title: Text('Give'));
+        title: Text('GIVE'));
   }
 }

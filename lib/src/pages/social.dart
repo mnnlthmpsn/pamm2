@@ -48,7 +48,7 @@ class _SocialState extends State<Social> {
         foregroundColor: Colors.white,
         backgroundColor: KColors.kPrimaryColor,
         title: const Text(
-          'Social',
+          'SOCIAL',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ));
   }
@@ -90,9 +90,9 @@ class _SocialState extends State<Social> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(width: MediaQuery.of(context).size.width * .3),
-                        Image.asset(Social.socialLinks[i]['image']!, height: 40),
+                        Image.asset(Social.socialLinks[i]['image']!, height: 40, color: KColors.kDarkColor),
                         const SizedBox(width: 16),
-                        Text(Social.socialLinks[i]['title']!, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)
+                        Text(Social.socialLinks[i]['title']!, style: const TextStyle(fontSize: 14),)
                       ],
                     )
                 ),
@@ -101,7 +101,7 @@ class _SocialState extends State<Social> {
             itemCount: Social.socialLinks.length,
           ),
           const SizedBox(height: 20),
-          const Text('Share PAM on', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          const Text('Share CAM on', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

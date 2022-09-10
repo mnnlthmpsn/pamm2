@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/src/components/webViewBuilder.dart';
@@ -14,33 +13,16 @@ class Contact extends StatefulWidget {
     {
       'name': 'Call Us',
       'target': 'phone',
-      'icon': Image.asset(
-        'assets/icons/call_us.png',
-        width: 40,
-        height: 40,
-      ),
-      'image': true
+      'icon': Icons.phone_in_talk_rounded,
+      'image': false
     },
     {
-      'name': 'Text Us',
+      'name': 'Send SMS',
       'target': 'sms',
-      'icon': Image.asset(
-        'assets/icons/sms_line.png',
-        width: 35,
-        height: 35,
-      ),
-      'image': true
+      'icon': Icons.messenger_rounded,
+      'image': false
     },
-    {
-      'name': 'Email Us',
-      'target': 'email',
-      'icon': Image.asset(
-        'assets/icons/mail.png',
-        width: 35,
-        height: 35,
-      ),
-      'image': true
-    },
+    {'name': 'Email Us', 'target': 'email', 'icon': Icons.mail, 'image': false},
     {
       'name': 'Whatsapp Us',
       'target': 'whatsapp',
@@ -48,6 +30,7 @@ class Contact extends StatefulWidget {
         'assets/icons/whatsap_line.png',
         width: 35,
         height: 35,
+        color: KColors.kDarkColor,
       ),
       'image': true
     },
@@ -58,19 +41,11 @@ class Contact extends StatefulWidget {
         'assets/icons/record_message.png',
         width: 35,
         height: 35,
+        color: KColors.kDarkColor,
       ),
       'image': true
     },
-    {
-      'name': 'Visit Site',
-      'target': 'site',
-      'icon': Image.asset(
-        'assets/icons/www.png',
-        width: 45,
-        height: 45,
-      ),
-      'image': true
-    }
+    {'name': 'Visit Site', 'target': 'site', 'icon': Icons.tv, 'image': false}
   ];
 
   @override
@@ -78,7 +53,6 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
-
   bool _hasCallSupport = false;
   final String _phone = '+233 54 060 9437';
 
@@ -121,7 +95,7 @@ class _ContactState extends State<Contact> {
     await launchUrl(Uri.parse('whatsapp://send?phone=$_phone'));
   }
 
-  void handleClick (item) {
+  void handleClick(item) {
     if (item['target'] == 'phone' && _hasCallSupport) {
       _makePhoneCall(_phone);
     }
@@ -133,10 +107,7 @@ class _ContactState extends State<Contact> {
     }
     if (item['target'] == 'whatsapp' || item['target'] == 'record') {
       _sendWhatsapp();
-    }
-    else {
-
-    }
+    } else {}
   }
 
   final dynamic htmlData = r"""
@@ -160,6 +131,13 @@ class _ContactState extends State<Contact> {
         physics: ScrollPhysics(),
         child: Column(
           children: [
+            Container(
+              alignment: Alignment.center,
+              height: 56,
+              width: double.infinity,
+              color: KColors.kLightColor,
+              child: Text('Choose an option'),
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -183,9 +161,7 @@ class _ContactState extends State<Contact> {
                             offset: Offset(0, 0))
                       ]),
                   child: ListTile(
-                      onTap: () => {
-                        handleClick(Contact.contactItems[i])
-                      },
+                      onTap: () => {handleClick(Contact.contactItems[i])},
                       title: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -195,14 +171,13 @@ class _ContactState extends State<Contact> {
                               ? Contact.contactItems[i]['icon']
                               : Icon(
                                   Contact.contactItems[i]['icon'],
-                                  color: KColors.kPrimaryColor,
-                                  size: 35,
+                                  color: KColors.kDarkColor,
+                                  size: 30,
                                 ),
-                          SizedBox(width: i == 5 ? 8 : 16),
+                          SizedBox(width: 16),
                           Text(
                             Contact.contactItems[i]['name']!,
-                            style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 14),
                           )
                         ],
                       )),
@@ -211,10 +186,9 @@ class _ContactState extends State<Contact> {
               itemCount: Contact.contactItems.length,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * .35,
-              width: double.infinity,
-              child: WebViewBuilder(url: 'https://pama.vercel.app/map')
-            )
+                height: MediaQuery.of(context).size.height * .35,
+                width: double.infinity,
+                child: WebViewBuilder(url: 'https://pama.vercel.app/map'))
           ],
         ),
       )),

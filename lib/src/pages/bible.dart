@@ -17,7 +17,7 @@ class Bible extends StatelessWidget {
     return AppBar(
       automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
-      title: const Text('Bible', style: TextStyle(fontSize: 18))
+      title: const Text('BIBLE', style: TextStyle(fontSize: 18))
     );
   }
 }

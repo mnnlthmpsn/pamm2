@@ -1,6 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
@@ -72,13 +73,15 @@ class _IRadioState extends State<IRadio> {
 
   PreferredSizeWidget _appBar() {
     return AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.black),
         elevation: 0,
         automaticallyImplyLeading: true,
         foregroundColor: KColors.kDarkColor,
         backgroundColor: Colors.white,
-        title: const Text(
-          'iRadio',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        centerTitle: true,
+        title: Image.asset(
+          'assets/images/coga_radio.png',
+          height: 80,
         ));
   }
 
@@ -305,7 +308,7 @@ class _IRadioState extends State<IRadio> {
                             child: programmes.isEmpty
                                 ? Text('No programmes for this day')
                                 : ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
+                                    physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: programmes[i]['attributes']
                                             ['programmes']['data']

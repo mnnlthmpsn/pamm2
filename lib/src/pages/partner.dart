@@ -17,6 +17,6 @@ class Partner extends StatelessWidget {
     return AppBar(
         automaticallyImplyLeading: true,
         backgroundColor: KColors.kPrimaryColor,
-        title: const Text('Partner', style: TextStyle(fontSize: 18)));
+        title: const Text('PARTNER', style: TextStyle(fontSize: 18)));
   }
 }

@@ -18,7 +18,7 @@ class About extends StatelessWidget {
         foregroundColor: KColors.kTextColorLight,
         backgroundColor: KColors.kPrimaryColor,
         title: const Text(
-          'About',
+          'ABOUT',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ));
   }

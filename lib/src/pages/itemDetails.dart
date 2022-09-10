@@ -116,7 +116,7 @@ class _ItemDetailsState extends State<ItemDetails> {
         ]);
   }
 
-  Widget _callToAction(context, product) {
+  Widget _callToAction(context, product, product_id) {
     return Row(
       children: [
         SizedBox(
@@ -132,7 +132,7 @@ class _ItemDetailsState extends State<ItemDetails> {
           width: MediaQuery.of(context).size.width * .35,
           child: TextButton(
               onPressed: () {
-                cartController.addToCart({'product': product , 'qty': _qtyController.value.text});
+                cartController.addToCart({'product': product , 'qty': _qtyController.value.text, 'id': product_id});
                 Get.snackbar('Title', 'Item added to cart',
                     snackPosition: SnackPosition.BOTTOM,
                     margin: const EdgeInsets.only(top:10, right: 10, left: 10, bottom: 25),
@@ -171,7 +171,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                     _imageGallery(context, product['attributes']['images']['data']!),
                     _productDetails(product['attributes']),
                     const SizedBox(height: 18),
-                    _callToAction(context, product['attributes']),
+                    _callToAction(context, product['attributes'], product['id']),
                     const SizedBox(height: 50),
                     product['attributes']['care_guide_info'] != null
                         ? _careInformation(product.careGuideInfo!)
@@ -212,6 +212,6 @@ class _ItemDetailsState extends State<ItemDetails> {
         automaticallyImplyLeading: true,
         foregroundColor: KColors.kLightColor,
         backgroundColor: KColors.kPrimaryColor,
-        title: const Text('Item Details', style: TextStyle(fontSize: 18)));
+        title: const Text('DETAILS', style: TextStyle(fontSize: 18)));
   }
 }
