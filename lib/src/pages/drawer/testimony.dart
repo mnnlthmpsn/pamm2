@@ -14,6 +14,10 @@ class Testimony extends StatefulWidget {
 class _TestimonyState extends State<Testimony> {
   final TextEditingController _countryLabel =
       TextEditingController(text: 'Country');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _prayerController = TextEditingController();
+  final TextEditingController _fullnameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +95,7 @@ class _TestimonyState extends State<Testimony> {
   }
 
   Widget _fullname() {
-    return KFormField(label: 'Fullname', icon: Icons.person);
+    return KFormField(label: 'Fullname', icon: Icons.person, controller: _fullnameController,);
   }
 
   Widget _country() {
@@ -125,19 +129,21 @@ class _TestimonyState extends State<Testimony> {
       label: 'Email',
       icon: Icons.email_rounded,
       enabledBorder: KColors.kPrimaryColor,
+      controller: _emailController,
     );
   }
 
   Widget _phone() {
-    return const KFormField(
-        label: 'Phone Number');
+    return KFormField(
+        label: 'Phone Number', controller: _phoneController,);
   }
 
   Widget _prayerRequest() {
-    return const KFormField(
+    return KFormField(
       label: 'Testimony',
       icon: Icons.favorite_rounded,
       textarea: true,
+      controller: _prayerController,
     );
   }
 

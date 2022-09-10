@@ -37,19 +37,19 @@ class _HomeState extends State<Home> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 12.0, bottom: 2),
+            padding: EdgeInsets.only(top: index == activeIndex ? 0 : 18.0, bottom: 2),
             child: item['type'] == 'icon'
-              ? FaIcon(item['icon'],size: 30, color: activeIndex == index ? Colors.white : KColors.kPrimaryColor)
-              : Image.asset(item['icon'], color: activeIndex == index ? Colors.white : KColors.kPrimaryColor, height: 30),
+              ? FaIcon(item['icon'], size: 21.5, color: activeIndex == index ? Colors.white : Colors.black87.withOpacity(.8))
+              : Image.asset(item['icon'], color: activeIndex == index ? Colors.white : Colors.black87.withOpacity(.8), height: 22.5),
           ),
           index == activeIndex
               ? const SizedBox.shrink()
               : Text(
-                  item['title'],
+                  item['title'].toString().toUpperCase(),
                   style: TextStyle(
-                      color: KColors.kPrimaryColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900),
                 )
         ],
       ),
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              activeIndex != 0 ? Home.menuItems[activeIndex]['title'] : '',
+              activeIndex != 0 ? Home.menuItems[activeIndex]['title'].toString().toUpperCase() : '',
               style: TextStyle(
                   fontSize: 16,
                   color: KColors.kLightColor,

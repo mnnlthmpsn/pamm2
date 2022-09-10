@@ -42,7 +42,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'eStore',
+              'STORE',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

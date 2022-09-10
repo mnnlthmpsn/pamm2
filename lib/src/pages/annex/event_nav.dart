@@ -22,7 +22,7 @@ class EventAnnex extends Events {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back_rounded)),
               const Text(
-                'Events',
+                'EVENTS',
                 style: TextStyle(fontSize: 16),
               ),
               openDrawer(Colors.white)

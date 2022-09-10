@@ -19,7 +19,7 @@ class Archives extends StatelessWidget {
     return AppBar(
       automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
-      title: const Text('Archives', style: TextStyle(fontSize: 18),)
+      title: const Text('ARCHIVES', style: TextStyle(fontSize: 18),)
     );
   }
 }

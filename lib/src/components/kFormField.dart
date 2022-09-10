@@ -9,18 +9,21 @@ class KFormField extends StatelessWidget {
   final IconData? icon;
   final bool? textarea;
   final Color? enabledBorder;
+  final TextEditingController controller;
 
   const KFormField(
       {Key? key,
       required this.label,
       this.icon,
       this.textarea,
+      required this.controller,
       this.enabledBorder})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       cursorColor: KColors.kTextColorDark,
       maxLines: textarea != null ? 3 : 1,
       decoration: InputDecoration(

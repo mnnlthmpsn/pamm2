@@ -1,4 +1,4 @@
-package com.cam.app
+package com.coga.cam
 
 import io.flutter.embedding.android.FlutterActivity
 

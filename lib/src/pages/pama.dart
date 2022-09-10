@@ -19,7 +19,7 @@ class PAMA extends StatelessWidget {
       automaticallyImplyLeading: true,
       backgroundColor: KColors.kPrimaryColor,
       title: const Text(
-          'PAMA',
+          'CAMA',
           style: TextStyle(fontSize: 18)
       ),
     );

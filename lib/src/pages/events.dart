@@ -22,7 +22,7 @@ class Events extends StatelessWidget {
         foregroundColor: Colors.white,
         backgroundColor: KColors.kPrimaryColor,
         title: const Text(
-          'Events',
+          'EVENTS',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ));
   }
