@@ -13,7 +13,7 @@ class Testimony extends StatefulWidget {
 
 class _TestimonyState extends State<Testimony> {
   final TextEditingController _countryLabel =
-      TextEditingController(text: 'Country');
+      TextEditingController(text: 'Country/Region');
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _prayerController = TextEditingController();

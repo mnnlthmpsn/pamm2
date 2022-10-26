@@ -6,8 +6,11 @@ import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/generated/assets.dart';
 import 'package:pamm2/src/repos/programmeRepo.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+
+import '../../helpers.dart';
 
 class IRadio extends StatefulWidget {
   const IRadio({Key? key}) : super(key: key);
@@ -221,18 +224,95 @@ class _IRadioState extends State<IRadio> {
             bottom: 0,
             right: 0,
             left: 0,
-            child: Container(
-              height: 50,
-              color: KColors.kLightColor,
-              child: Center(
-                  child: Marquee(
-                text: 'Welcome to CAM iRadio',
-                style: TextStyle(fontSize: 14),
-                blankSpace: 80,
-                velocity: 30,
-              )),
-            ))
+            child: _support,
+            // child: Container(
+            //   height: 50,
+            //   color: KColors.kLightColor,
+            //   child: Center(
+            //       child: Marquee(
+            //     text: 'Welcome to CAM iRadio',
+            //     style: TextStyle(fontSize: 14),
+            //     blankSpace: 80,
+            //     velocity: 30,
+            //   )),
+            // )
+        )
       ],
+    );
+  }
+
+  Widget get _support {
+    return Stack(
+      children: [
+        supportText,
+        SizedBox(
+          height: MediaQuery.of(context).size.height * .22,
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * .42,
+          bottom: 15,
+          child: donate,
+        )
+      ],
+    );
+  }
+
+  Widget get supportText {
+    return Container(
+        margin: EdgeInsets.only(left: 15, right: 15, top: 8),
+        width: double.infinity,
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+        child: Column(
+          children: const [
+            Text(
+                "Please Support", style: TextStyle(fontSize: 16),
+            ),
+            Text(
+                "Chris Asante", style: TextStyle(fontSize: 16),
+            )
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+        ));
+  }
+
+  Widget get donate {
+    return GestureDetector(
+      onTap: () => newPage(context, 'give_2'),
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(45),
+            boxShadow: [
+              BoxShadow(
+                color: KColors.kDarkColor.withOpacity(.2),
+                spreadRadius: 6,
+                blurRadius: 6,
+                offset: Offset(0, 1), // changes position of shadow
+              ),
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              Assets.iconsGive2,
+              height: 18,
+              width: 22,
+            ),
+            SizedBox(height: 1,),
+            Text(
+              'Donate',
+              style: TextStyle(fontSize: 14, color: KColors.kPrimaryColor),
+            )
+          ],
+        ),
+      ),
     );
   }
 

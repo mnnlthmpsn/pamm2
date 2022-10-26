@@ -21,6 +21,7 @@ import 'package:pamm2/src/pages/login.dart';
 import 'package:pamm2/src/pages/pama.dart';
 import 'package:pamm2/src/pages/partner.dart';
 import 'package:pamm2/src/pages/social.dart';
+import 'package:pamm2/src/pages/splashScreen.dart';
 import 'package:pamm2/src/pages/tv.dart';
 import 'package:pamm2/src/pages/welcome.dart';
 
@@ -48,9 +49,10 @@ class MyApp extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSwatch().copyWith(secondary: KColors.kLightColor),
       ),
-      initialRoute: '/',
+      initialRoute: 'splash',
       routes: {
         '/': (context) => const Welcome(),
+        'splash': (context) => const SplashScreen(),
         'home': (context) => const Home(),
         'archives': (context) => const Archives(),
         'about': (context) => const About(),

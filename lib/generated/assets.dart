@@ -8,10 +8,10 @@ class Assets {
   static const String iconsCallUsLarge = 'assets/icons/call_us_large.png';
   static const String iconsEvent = 'assets/icons/event.png';
   static const String iconsEventLarge = 'assets/icons/event_large.png';
-  static const String iconsFace-black = 'assets/icons/face-black.png';
+  static const String iconsFaceBlack = 'assets/icons/faceBlack.png';
   static const String iconsFacebook = 'assets/icons/facebook.png';
-  static const String iconsGive 1 = 'assets/icons/give 1.png';
-  static const String iconsGive 2 = 'assets/icons/give 2.png';
+  static const String iconsGive1 = 'assets/icons/give1.png';
+  static const String iconsGive2 = 'assets/icons/give2.png';
   static const String iconsHand = 'assets/icons/hand.png';
   static const String iconsInstaBlack = 'assets/icons/insta_black.png';
   static const String iconsInstaRed = 'assets/icons/insta_red.png';
@@ -41,13 +41,25 @@ class Assets {
   static const String images4 = 'assets/images/4.png';
   static const String images5 = 'assets/images/5.png';
   static const String imagesCogaRadio = 'assets/images/coga_radio.png';
+  static const String imagesFacebook = 'assets/images/facebook.png';
+  static const String imagesInstagram = 'assets/images/instagram.png';
   static const String imagesLogo = 'assets/images/logo.png';
   static const String imagesPastor = 'assets/images/pastor.png';
   static const String imagesPrayer = 'assets/images/prayer.jpg';
   static const String imagesSocialMed = 'assets/images/social_med.jpg';
   static const String imagesTestimony = 'assets/images/testimony.jpg';
+  static const String imagesTikTok = 'assets/images/tik_tok.png';
+  static const String imagesTwitter = 'assets/images/twitter.png';
   static const String imagesVol = 'assets/images/vol.png';
+  static const String imagesWatchUs = 'assets/images/watch_us.jpeg';
+  static const String imagesYoutube = 'assets/images/youtube.png';
   static const String lottieConfetti = 'assets/lottie/confetti.json';
   static const String lottieLoader = 'assets/lottie/loader.json';
+  static const String socialFacebook = 'assets/social/facebook.png';
+  static const String socialInstagram = 'assets/social/instagram.png';
+  static const String socialTiktok = 'assets/social/tiktok.png';
+  static const String socialTwitter = 'assets/social/twitter.png';
+  static const String socialWhatsapp = 'assets/social/whatsapp.png';
+  static const String socialYoutube = 'assets/social/youtube.png';
 
 }

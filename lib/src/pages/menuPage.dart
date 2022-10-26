@@ -84,7 +84,7 @@ class _MenuPageState extends State<MenuPage> {
       {
         'title': 'Give',
         'icon': Image.asset(
-          'assets/icons/give 2.png',
+          'assets/icons/give2.png',
           width: 35,
           height: 35,
         ),

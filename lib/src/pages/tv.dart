@@ -1,11 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pamm2/config.dart';
 import 'package:better_player/better_player.dart';
+import 'package:pamm2/generated/assets.dart';
+import 'package:pamm2/helpers.dart';
 import 'package:pamm2/src/components/countdown.dart';
 import 'package:intl/intl.dart';
 import 'package:pamm2/src/pages/tvFullScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TV extends StatefulWidget {
   const TV({Key? key}) : super(key: key);
@@ -26,11 +30,20 @@ class _TVState extends State<TV> {
     });
   }
 
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
   Map<String, String> get _getDate {
     var temp = DateTime.now();
     var day = DateFormat('EEEE').format(temp);
     var date = DateFormat('d').format(temp);
-    var month = DateFormat('MMM').format(temp);
+    var month = DateFormat('MMMM').format(temp);
     // DateFormat('EEEE, d MMM, yyyy')
     return {"day": day, "date": date, "month": month};
   }
@@ -65,17 +78,23 @@ class _TVState extends State<TV> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
-          systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: KColors.kLightColor),
+          systemOverlayStyle:
+              SystemUiOverlayStyle(statusBarColor: KColors.kLightColor),
           iconTheme: IconThemeData(color: KColors.kDarkColor),
           automaticallyImplyLeading: true,
           toolbarHeight: 40,
           backgroundColor: KColors.kLightColor,
           title: Row(
             children: [
-              Text('BROADCAST', style: TextStyle(color: KColors.kDarkColor, fontSize: 18, fontWeight: FontWeight.w300),)
+              Text(
+                'BROADCAST',
+                style: TextStyle(
+                    color: KColors.kDarkColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300),
+              )
             ],
           ),
           centerTitle: false,
@@ -166,6 +185,11 @@ class _TVState extends State<TV> {
               SizedBox(height: MediaQuery.of(context).size.height * .03),
               _nextLiveEvent,
               _comingUp,
+              SizedBox(height: 8),
+              _watchUs,
+              SizedBox(height: 8),
+              _connectWithUs,
+              _support,
               SizedBox(height: MediaQuery.of(context).size.height * .1)
             ],
           ),
@@ -193,12 +217,12 @@ class _TVState extends State<TV> {
         ],
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.grey.withOpacity(.2)),
-          bottom: BorderSide(color: Colors.grey.withOpacity(.2)),
-          left: BorderSide(color: KColors.kPrimaryColor, width: 5),
-        ),
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(color: Colors.grey.withOpacity(.2)),
+            bottom: BorderSide(color: Colors.grey.withOpacity(.2)),
+            left: BorderSide(color: KColors.kPrimaryColor, width: 5),
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -206,8 +230,7 @@ class _TVState extends State<TV> {
               blurRadius: 5,
               offset: Offset(0, 3), // changes position of shadow
             ),
-          ]
-      ),
+          ]),
     );
   }
 
@@ -232,8 +255,8 @@ class _TVState extends State<TV> {
                         size: 15,
                       ),
                       SizedBox(width: 5),
-                      Text(
-                          DateFormat('EEEE, d MMMM, yyyy').format(_getNextSunday))
+                      Text(DateFormat('EEEE, d MMMM, yyyy')
+                          .format(_getNextSunday))
                     ],
                   ),
                   Text('11:00 AM')
@@ -269,7 +292,9 @@ class _TVState extends State<TV> {
                   Row(
                     children: [
                       Visibility(
-                          child: Text("${DateFormat('d MMM, 11:00 ').format(_getNextSunday)}AM", style: TextStyle(fontSize: 12)),
+                          child: Text(
+                              "${DateFormat('d MMM, 11:00 ').format(_getNextSunday)}AM",
+                              style: TextStyle(fontSize: 12)),
                           visible: _remind),
                       const SizedBox(width: 2),
                       Switch(
@@ -284,14 +309,16 @@ class _TVState extends State<TV> {
             ),
             Divider(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.calendar_month_rounded, color: KColors.kPrimaryColor),
+                      Icon(Icons.calendar_month_rounded,
+                          color: KColors.kPrimaryColor),
                       const SizedBox(width: 10),
                       const Text('Add To Calendar')
                     ],
@@ -301,7 +328,8 @@ class _TVState extends State<TV> {
             ),
             Divider(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 6),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -332,5 +360,174 @@ class _TVState extends State<TV> {
         ),
       );
     });
+  }
+
+  Widget get _watchUs {
+    return Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 15),
+        child: Image.asset(Assets.imagesWatchUs),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 7,
+            offset: Offset(0, 1), // changes position of shadow
+          )
+        ]));
+  }
+
+  Widget get _connectWithUs {
+    List<Map<String, String>> socialLinks = [
+      {
+        'title': 'Facebook',
+        'image': Assets.imagesFacebook,
+        'link': 'https://facebook.com/prophetasantemensah'
+      },
+      {
+        'title': 'Twitter',
+        'image': Assets.imagesTwitter,
+        'link': 'https://twitter.com/revasantemensah'
+      },
+      {
+        'title': 'Tiktok',
+        'image': Assets.imagesTikTok,
+        'link': 'https://www.tiktok.com/@chrisasanteministries'
+      },
+      {
+        'title': 'Youtube',
+        'image': Assets.imagesYoutube,
+        'link': 'https://www.youtube.com/channel/UCCawkgDRQGkkuOq9iMq75XQ'
+      },
+      {
+        'title': 'Instagram',
+        'image': Assets.imagesInstagram,
+        'link': 'https://www.instagram.com/prophetasantemensah/'
+      }
+    ];
+
+    return Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(15),
+        margin: EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          children: [
+            Text(
+              'Connect with us',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: socialLinks
+                  .map((e) => GestureDetector(
+                      onTap: () => _launchInBrowser(Uri.parse(e['link']!)),
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        width: 40,
+                        height: 40,
+                        child: Image.asset(
+                          e['image']!,
+                        ),
+                      )))
+                  .toList(),
+            )
+          ],
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: Offset(0, 1), // changes position of shadow
+              )
+            ]));
+  }
+
+  Widget get _support {
+    return Stack(
+      children: [
+        supportText,
+        SizedBox(
+          height: MediaQuery.of(context).size.height * .21,
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * .42,
+          bottom: 2,
+          child: donate,
+        )
+      ],
+    );
+  }
+
+  Widget get supportText {
+    return Container(
+        margin: EdgeInsets.only(left: 15, right: 15, top: 8),
+        width: double.infinity,
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+        child: Column(
+          children: const [
+            Text(
+              "Please Support",
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              "Chris Asante",
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: Offset(0, 1), // changes position of shadow
+              )
+            ]));
+  }
+
+  Widget get donate {
+    return GestureDetector(
+      onTap: () => newPage(context, 'give_2'),
+      child: Container(
+        padding: EdgeInsets.all(5),
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(45),
+            boxShadow: [
+              BoxShadow(
+                color: KColors.kDarkColor.withOpacity(.2),
+                spreadRadius: 6,
+                blurRadius: 6,
+                offset: Offset(0, 1), // changes position of shadow
+              ),
+            ]),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              Assets.iconsGive2,
+              height: 18,
+              width: 22,
+            ),
+            SizedBox(height: 1,),
+            Text(
+              'Donate',
+              style: TextStyle(fontSize: 14, color: KColors.kPrimaryColor),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

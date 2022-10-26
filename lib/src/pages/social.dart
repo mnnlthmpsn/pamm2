@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/generated/assets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Social extends StatefulWidget {
   const Social({Key? key}) : super(key: key);
 
-  static const socialLinks = [
-    { 'title': 'Facebook', 'image': 'assets/icons/facebook.png', 'link': 'https://facebook.com/prophetasantemensah' },
-    { 'title': 'Twitter', 'image': 'assets/icons/twitter.png', 'link': 'https://twitter.com/revasantemensah' },
-    { 'title': 'Instagram', 'image': 'assets/icons/instagram.png', 'link': 'https://www.instagram.com/prophetasantemensah/' },
-    { 'title': 'Youtube', 'image': 'assets/icons/youtube.png', 'link': 'https://www.youtube.com/channel/UCCawkgDRQGkkuOq9iMq75XQ' },
-    { 'title': 'Tiktok', 'image': 'assets/icons/tiktok.png', 'link': 'https://www.tiktok.com/@chrisasanteministries' }
+  static List<Map<String, String>> socialLinks = [
+    {
+      'title': 'Facebook',
+      'image': Assets.socialFacebook,
+      'link': 'https://facebook.com/prophetasantemensah'
+    },
+    {
+      'title': 'Twitter',
+      'image': Assets.socialTwitter,
+      'link': 'https://twitter.com/revasantemensah'
+    },
+    {
+      'title': 'Tiktok',
+      'image': Assets.socialTiktok,
+      'link': 'https://www.tiktok.com/@chrisasanteministries'
+    },
+    {
+      'title': 'Youtube',
+      'image': Assets.socialYoutube,
+      'link': 'https://www.youtube.com/channel/UCCawkgDRQGkkuOq9iMq75XQ'
+    },
+    {
+      'title': 'Instagram',
+      'image': Assets.socialInstagram,
+      'link': 'https://www.instagram.com/prophetasantemensah/'
+    }
   ];
 
   @override
@@ -18,7 +39,6 @@ class Social extends StatefulWidget {
 }
 
 class _SocialState extends State<Social> {
-
   bool _hasCallSupport = false;
   Future<void>? _launched;
   String _phone = '';
@@ -49,7 +69,8 @@ class _SocialState extends State<Social> {
         backgroundColor: KColors.kPrimaryColor,
         title: const Text(
           'SOCIAL',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
         ));
   }
 
@@ -58,11 +79,18 @@ class _SocialState extends State<Social> {
       physics: const ScrollPhysics(),
       child: Column(
         children: [
+          // Container(
+          //   color: Colors.red,
+          //   height: MediaQuery.of(context).size.height * .13,
+          //   width: double.infinity,
+          //   child: Image.asset('assets/images/social_med.jpg', fit: BoxFit.cover, alignment: Alignment.center)
+          // ),
           Container(
-            color: Colors.red,
-            height: MediaQuery.of(context).size.height * .35,
+            alignment: Alignment.center,
+            height: 56,
             width: double.infinity,
-            child: Image.asset('assets/images/social_med.jpg', fit: BoxFit.cover, alignment: Alignment.center)
+            color: KColors.kLightColor,
+            child: const Text('Follow Chris Asante Ministries on'),
           ),
           ListView.builder(
             shrinkWrap: true,
@@ -78,40 +106,63 @@ class _SocialState extends State<Social> {
                         colors: [
                           Colors.white,
                           KColors.kLightColor.withOpacity(.6)
-                        ]
-                    ),
+                        ]),
                     boxShadow: [
-                      BoxShadow(color: Colors.grey.withOpacity(.1), spreadRadius: 8, blurRadius: 60, offset: Offset(0, 0))
-                    ]
-                ),
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(.1),
+                          spreadRadius: 8,
+                          blurRadius: 60,
+                          offset: Offset(0, 0))
+                    ]),
                 child: ListTile(
-                  onTap: () => _launchInBrowser(Uri.parse(Social.socialLinks[i]['link']!)),
+                    onTap: () => _launchInBrowser(
+                        Uri.parse(Social.socialLinks[i]['link']!)),
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(width: MediaQuery.of(context).size.width * .3),
-                        Image.asset(Social.socialLinks[i]['image']!, height: 40, color: KColors.kDarkColor),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  Social.socialLinks[i]['title'] == 'Tiktok' || Social.socialLinks[i]['title'] == 'Instagram'
+                                      ? 5.0
+                                      : 0),
+                          child: Image.asset(Social.socialLinks[i]['image']!,
+                              height:
+                                  Social.socialLinks[i]['title'] == 'Tiktok' ||
+                                          Social.socialLinks[i]['title'] ==
+                                              'Instagram'
+                                      ? 32
+                                      : 40,
+                              color: KColors.kDarkColor),
+                        ),
                         const SizedBox(width: 16),
-                        Text(Social.socialLinks[i]['title']!, style: const TextStyle(fontSize: 14),)
+                        Text(
+                          Social.socialLinks[i]['title']!,
+                          style: const TextStyle(fontSize: 14),
+                        )
                       ],
-                    )
-                ),
+                    )),
               );
             },
             itemCount: Social.socialLinks.length,
           ),
           const SizedBox(height: 20),
-          const Text('Share CAM on', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          const Text('Share CAM on',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/icons/face-black.png', height: 30),
+              Image.asset('assets/icons/faceBlack.png', height: 30),
               const SizedBox(width: 30),
               Image.asset('assets/icons/tweet_black.png', height: 30),
               const SizedBox(width: 30),
-              const Icon(Icons.share, size: 30,)
+              const Icon(
+                Icons.share,
+                size: 30,
+              )
             ],
           ),
           const SizedBox(height: 30)

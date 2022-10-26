@@ -14,7 +14,7 @@ class Prayer extends StatefulWidget {
 
 class _PrayerState extends State<Prayer> {
   final TextEditingController _countryLabel =
-      TextEditingController(text: 'Country');
+      TextEditingController(text: 'Country/Region');
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
