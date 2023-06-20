@@ -10,12 +10,14 @@ class KFormField extends StatelessWidget {
   final bool? textarea;
   final Color? enabledBorder;
   final TextEditingController controller;
+  final bool validate;
 
   const KFormField(
       {Key? key,
       required this.label,
       this.icon,
       this.textarea,
+      this.validate = false,
       required this.controller,
       this.enabledBorder})
       : super(key: key);
@@ -25,6 +27,15 @@ class KFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       cursorColor: KColors.kTextColorDark,
+      validator: (value) {
+        if (validate) {
+          if (value == null || value.isEmpty) {
+            return "Please enter $label";
+          }
+        }
+
+        return null;
+      },
       maxLines: textarea != null ? 3 : 1,
       decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.auto,

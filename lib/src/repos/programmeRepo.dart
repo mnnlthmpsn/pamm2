@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pamm2/src/models/programme.dart';
 
 class ProgrammeRepo {
-  Future<dynamic> getProgrammes() async {
+  Future<List<DayModel>> getProgrammes() async {
     try {
-      Uri url = Uri.parse('https://pama-api.herokuapp.com/api/days?fields=title&populate[programmes][fields][0]=title,time');
+      Uri url = Uri.parse("https://cogairadio.com/cama-api/programmes");
       dynamic res = await http.get(url);
-      dynamic resBody = jsonDecode(res.body);
-      print(resBody['data']);
-
-      return resBody['data'];
+      var temp = jsonDecode(res.body);
+      return (temp as List).map((e) => DayModelFactory.fromJson(e)).toList();
     } catch (e) {
       rethrow;
     }

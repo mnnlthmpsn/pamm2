@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pamm2/config.dart';
 import 'package:better_player/better_player.dart';
@@ -128,72 +129,117 @@ class _TVState extends State<TV> {
                             Text("${_getDate["day"]!},",
                                 style: TextStyle(
                                     color: Colors.white60,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600)),
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400)),
                             Text(_getDate["month"]!,
                                 style: TextStyle(
                                     color: Colors.white60,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600))
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400))
                           ],
                         ),
-                        const SizedBox(
-                          width: 10,
+                        SizedBox(
+                          width: 8.w,
                         ),
                         Text(
                           _getDate["date"]!,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 45,
-                              fontWeight: FontWeight.bold),
+                              fontSize: 50.sp,
+                              fontWeight: FontWeight.w900),
                         )
                       ],
                     )
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              TVFullScreen(url: url))),
-                  child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: BetterPlayer.network(
-                        url,
-                        betterPlayerConfiguration:
-                            const BetterPlayerConfiguration(
-                                autoDetectFullscreenAspectRatio: true,
-                                aspectRatio: 16 / 9,
-                                autoPlay: true,
-                                controlsConfiguration:
-                                    BetterPlayerControlsConfiguration(
-                                        enableSubtitles: false,
-                                        enableQualities: false,
-                                        enableAudioTracks: false,
-                                        showControls: false)),
+              _cogaTV,
+              SizedBox(
+                height: 230,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 200,
+                      padding: const EdgeInsets.symmetric(horizontal: 1),
+                      child: GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    TVFullScreen(url: url))),
+                        child: BetterPlayer.network(
+                          url,
+                          betterPlayerConfiguration:
+                          const BetterPlayerConfiguration(
+                              autoDetectFullscreenAspectRatio: true,
+                              aspectRatio: 16 / 9,
+                              autoPlay: true,
+                              controlsConfiguration:
+                              BetterPlayerControlsConfiguration(
+                                  enableSubtitles: false,
+                                  enableQualities: false,
+                                  enableAudioTracks: false,
+                                  showControls: false)),
+                        ),
                       ),
                     ),
-                  ),
+                    Positioned(
+                      bottom: 0,
+                      right: 25,
+                      child: donate,
+                    )
+                  ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * .03),
+              SizedBox(height: MediaQuery.of(context).size.height * .02),
               _nextLiveEvent,
               _comingUp,
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _watchUs,
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               _connectWithUs,
               _support,
               SizedBox(height: MediaQuery.of(context).size.height * .1)
             ],
           ),
         ));
+  }
+
+  Widget get _cogaTV {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      alignment: Alignment.centerLeft,
+      width: double.infinity,
+      height: 40,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('COGA TV',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.deepPurpleAccent.withOpacity(.5))),
+          FaIcon(FontAwesomeIcons.satelliteDish,
+              size: 20, color: Colors.deepPurpleAccent.withOpacity(.5))
+          // Icon(Icons.satellite_alt_rounded, size: 20, color: KColors.kPrimaryColor,)
+        ],
+      ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(color: Colors.grey.withOpacity(.2)),
+            bottom: BorderSide(color: Colors.grey.withOpacity(.2)),
+            left: BorderSide(color: Colors.deepPurpleAccent.withOpacity(.5), width: 5),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ]),
+    );
   }
 
   Widget get _nextLiveEvent {
@@ -206,13 +252,13 @@ class _TVState extends State<TV> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('Next Live Event',
+          Text('Next Live Service',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
-                  color: KColors.kPrimaryColor)),
-          FaIcon(FontAwesomeIcons.satelliteDish,
-              size: 20, color: KColors.kPrimaryColor)
+                  color: Colors.deepPurpleAccent.withOpacity(.5))),
+          Icon(Icons.notifications,
+              size: 22, color: Colors.deepPurpleAccent.withOpacity(.5))
           // Icon(Icons.satellite_alt_rounded, size: 20, color: KColors.kPrimaryColor,)
         ],
       ),
@@ -221,7 +267,7 @@ class _TVState extends State<TV> {
           border: Border(
             top: BorderSide(color: Colors.grey.withOpacity(.2)),
             bottom: BorderSide(color: Colors.grey.withOpacity(.2)),
-            left: BorderSide(color: KColors.kPrimaryColor, width: 5),
+            left: BorderSide(color: Colors.deepPurpleAccent.withOpacity(.5), width: 5),
           ),
           boxShadow: [
             BoxShadow(
@@ -320,7 +366,10 @@ class _TVState extends State<TV> {
                       Icon(Icons.calendar_month_rounded,
                           color: KColors.kPrimaryColor),
                       const SizedBox(width: 10),
-                      const Text('Add To Calendar')
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: const Text('Add To Calendar'),
+                      )
                     ],
                   )
                 ],
@@ -334,12 +383,15 @@ class _TVState extends State<TV> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Icon(Icons.share_rounded, color: KColors.kPrimaryColor),
-                      const SizedBox(width: 10),
-                      const Text('Share')
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.share_rounded, color: KColors.kPrimaryColor),
+                        const SizedBox(width: 10),
+                        const Text('Share')
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -452,11 +504,11 @@ class _TVState extends State<TV> {
       children: [
         supportText,
         SizedBox(
-          height: MediaQuery.of(context).size.height * .21,
+          height: MediaQuery.of(context).size.height * .22.h,
         ),
         Positioned(
           left: MediaQuery.of(context).size.width * .42,
-          bottom: 2,
+          bottom: 0,
           child: donate,
         )
       ],
@@ -498,17 +550,17 @@ class _TVState extends State<TV> {
       onTap: () => newPage(context, 'give_2'),
       child: Container(
         padding: EdgeInsets.all(5),
-        width: 60,
-        height: 60,
+        width: 64,
+        height: 64,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(45),
             boxShadow: [
               BoxShadow(
                 color: KColors.kDarkColor.withOpacity(.2),
-                spreadRadius: 6,
-                blurRadius: 6,
-                offset: Offset(0, 1), // changes position of shadow
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 0), // changes position of shadow
               ),
             ]),
         child: Column(
@@ -517,13 +569,12 @@ class _TVState extends State<TV> {
           children: [
             Image.asset(
               Assets.iconsGive2,
-              height: 18,
-              width: 22,
+              height: 30,
+              width: 30,
             ),
-            SizedBox(height: 1,),
             Text(
               'Donate',
-              style: TextStyle(fontSize: 14, color: KColors.kPrimaryColor),
+              style: TextStyle(fontSize: 13, color: KColors.kPrimaryColor),
             )
           ],
         ),

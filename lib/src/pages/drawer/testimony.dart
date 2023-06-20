@@ -1,8 +1,13 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/src/components/kButton.dart';
 import 'package:pamm2/src/components/kFormField.dart';
+
+import '../../repos/miscRepo.dart';
 
 class Testimony extends StatefulWidget {
   const Testimony({Key? key}) : super(key: key);
@@ -18,6 +23,8 @@ class _TestimonyState extends State<Testimony> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _prayerController = TextEditingController();
   final TextEditingController _fullnameController = TextEditingController();
+
+  var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +156,44 @@ class _TestimonyState extends State<Testimony> {
 
   Widget _submitTestimony() {
     return KButton(
-      onPressed: () {},
-      label: 'Submit',
+      onPressed: () async {
+        setState(() {
+          isLoading = true;
+        });
+        var payload = {
+          "fullname": _fullnameController.value.text,
+          "country": _countryLabel.text,
+          "email": _emailController.value.text,
+          "phoneNumber": _phoneController.value.text,
+          "requestType": "TESTIMONY",
+          "content": _prayerController.value.text
+        };
+
+        MiscRepo miscRepo = MiscRepo();
+
+        try {
+          await miscRepo.submitRequest(payload);
+          Get.snackbar('Testimony', 'Testimony request submitted Successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              margin: const EdgeInsets.only(
+                  top: 10, right: 10, left: 10, bottom: 25),
+              backgroundColor: KColors.kLightColor,
+              icon: const Icon(Icons.check, color: Colors.green));
+
+          setState(() {
+            isLoading = false;
+          });
+        }
+        catch (e) {
+          Get.snackbar('Prayer', 'An error occurred submitting prayer request',
+              snackPosition: SnackPosition.BOTTOM,
+              margin: const EdgeInsets.only(
+                  top: 10, right: 10, left: 10, bottom: 25),
+              backgroundColor: KColors.kLightColor,
+              icon: const Icon(Icons.error, color: Colors.red));
+        }
+      },
+      label: isLoading ? '...loading' :'Submit',
       showIcon: false,
       color: KColors.kPrimaryColor,
     );

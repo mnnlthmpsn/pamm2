@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/helpers.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
+import 'package:pamm2/src/models/product.dart';
 import 'package:pamm2/src/pages/itemDetails.dart';
 import 'package:pamm2/src/repos/shopRepo.dart';
 
@@ -53,7 +54,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
                 icon: GetBuilder<CartController>(builder: (cartController) {
                   return Badge(
                       child: const Icon(Icons.shopping_cart),
-                      badgeColor: KColors.kLightColor,
+                      badgeStyle: BadgeStyle(badgeColor: KColors.kLightColor),
                       badgeContent: Text(
                         cartController.getCartLength(),
                         style: TextStyle(color: KColors.kPrimaryColor),
@@ -63,7 +64,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
         ));
   }
 
-  Widget _itemCard(dynamic product) {
+  Widget _itemCard(ProductModel product) {
     return Builder(builder: (BuildContext context) {
       return Container(
         padding:
@@ -78,8 +79,10 @@ class _StoreAnnexState extends State<StoreAnnex> {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: CachedNetworkImage(
-                    imageUrl: product['attributes']['images']!['data'][0]['attributes']['url'],
+                child: product.images.isEmpty
+                  ? const Icon(Icons.shopping_cart, size: 30)
+                  : CachedNetworkImage(
+                    imageUrl: product.images[0].url,
                     placeholder: (BuildContext context, String url) {
                       return const Icon(Icons.shopping_cart, size: 30);
                     },
@@ -88,10 +91,10 @@ class _StoreAnnexState extends State<StoreAnnex> {
               ),
               Column(
                 children: [
-                  Text(product['attributes']!['category']!['data']['attributes']['title'],
+                  Text(product.category.title,
                       style: const TextStyle(fontSize: 12)),
                   Text(
-                    product['attributes']['title']!,
+                    product.title,
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 25),
@@ -103,9 +106,7 @@ class _StoreAnnexState extends State<StoreAnnex> {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => ItemDetails(
-                                productId: product['id']!,
-                              ))),
+                              builder: (BuildContext context) => ItemDetails(product: product,))),
                       child: const Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 35, vertical: 10),

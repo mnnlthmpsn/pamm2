@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/generated/assets.dart';
+import 'package:pamm2/src/models/programme.dart';
 import 'package:pamm2/src/repos/programmeRepo.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
@@ -25,7 +26,7 @@ class _IRadioState extends State<IRadio> {
 
   final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
   final ProgrammeRepo programmeRepo = ProgrammeRepo();
-  late Future myFuture;
+  late Future<List<DayModel>> myFuture;
 
   @override
   void initState() {
@@ -127,148 +128,122 @@ class _IRadioState extends State<IRadio> {
   }
 
   Widget _nowPlaying() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-            top: MediaQuery.of(context).size.height * 0.1,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                _isChanging == true
-                    ? 'Vol ${_volumeValue.ceil().toString()} %'
-                    : '',
-                style: TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.bold,
-                    color: KColors.kPrimaryColor),
-              ),
-            )),
-        Positioned(
-          top: MediaQuery.of(context).size.height * .06,
-          left: 0,
-          right: 0,
-          child: SfRadialGauge(
-            axes: <RadialAxis>[
-              RadialAxis(
-                minimum: 0,
-                maximum: 100,
-                startAngle: 270,
-                endAngle: 270,
-                showLabels: false,
-                showTicks: false,
-                radiusFactor: .55,
-                axisLineStyle: AxisLineStyle(
-                    cornerStyle: CornerStyle.bothFlat,
-                    color: Colors.black12.withOpacity(.06),
-                    thickness: 5),
-                pointers: <GaugePointer>[
-                  RangePointer(
-                      value: _volumeValue,
-                      cornerStyle: CornerStyle.bothFlat,
-                      width: 5,
-                      sizeUnit: GaugeSizeUnit.logicalPixel,
-                      color: Colors.orangeAccent,
-                      gradient: const SweepGradient(
-                          colors: <Color>[Color(0XFFF9D405), Color(0XFFF93505)],
-                          stops: <double>[0.25, 0.75])),
-                  WidgetPointer(
-                    value: _volumeValue,
-                    enableDragging: true,
-                    onValueChanged: (val) => onVolumeChange(val),
-                    onValueChangeEnd: (val) => onVolumeChangeEnd(val),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: const Color(0xffE7E9E8),
-                            border: Border.all(
-                                color: KColors.kLightColor, width: .5),
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black12.withOpacity(.2),
-                                  spreadRadius: .8,
-                                  blurRadius: .8,
-                                  offset: const Offset(1, 2))
-                            ]),
-                        padding: const EdgeInsets.all(3),
-                        child: const Icon(
-                          Icons.volume_up_outlined,
-                          size: 18,
-                          color: Colors.black45,
-                        )),
-                  )
-                ],
-              )
-            ],
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            _radialGauge,
+            Positioned(
+              bottom: 0,
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _playerBuffer,
+            )
+          ],
         ),
-        Positioned(
-          top: MediaQuery.of(context).size.height * .27,
-          right: 0,
-          left: 0,
-          child: PlayerBuilder.isBuffering(
-              player: _assetsAudioPlayer,
-              builder: (BuildContext context, bool isbuffering) {
-                if (isbuffering) {
-                  return _bufferingIcon();
-                } else {
-                  return PlayerBuilder.isPlaying(
-                      player: _assetsAudioPlayer,
-                      builder: (BuildContext context, bool isPlaying) {
-                        return isPlaying ? _pauseButton() : _playButton();
-                      });
-                }
-              }),
-        ),
-        Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: _support,
-            // child: Container(
-            //   height: 50,
-            //   color: KColors.kLightColor,
-            //   child: Center(
-            //       child: Marquee(
-            //     text: 'Welcome to CAM iRadio',
-            //     style: TextStyle(fontSize: 14),
-            //     blankSpace: 80,
-            //     velocity: 30,
-            //   )),
-            // )
+        _support
+      ],
+    );
+  }
+
+  Widget get _playerBuffer {
+    return PlayerBuilder.isBuffering(
+        player: _assetsAudioPlayer,
+        builder: (BuildContext context, bool isbuffering) {
+          if (isbuffering) {
+            return _bufferingIcon();
+          } else {
+            return PlayerBuilder.isPlaying(
+                player: _assetsAudioPlayer,
+                builder: (BuildContext context, bool isPlaying) {
+                  return isPlaying ? _pauseButton() : _playButton();
+                });
+          }
+        });
+  }
+
+  Widget get _radialGauge {
+    return SfRadialGauge(
+      title: GaugeTitle(
+          text: _isChanging == true
+              ? 'Vol ${_volumeValue.ceil().toString()} %'
+              : ''),
+      axes: <RadialAxis>[
+        RadialAxis(
+          minimum: 0,
+          maximum: 100,
+          startAngle: 270,
+          endAngle: 270,
+          showLabels: false,
+          showTicks: false,
+          radiusFactor: .55,
+          axisLineStyle: AxisLineStyle(
+              cornerStyle: CornerStyle.bothFlat,
+              color: Colors.black12.withOpacity(.06),
+              thickness: 5),
+          pointers: <GaugePointer>[
+            RangePointer(
+                value: _volumeValue,
+                cornerStyle: CornerStyle.bothFlat,
+                width: 5,
+                sizeUnit: GaugeSizeUnit.logicalPixel,
+                color: Colors.orangeAccent,
+                gradient: const SweepGradient(
+                    colors: <Color>[Color(0XFFF9D405), Color(0XFFF93505)],
+                    stops: <double>[0.25, 0.75])),
+            WidgetPointer(
+              value: _volumeValue,
+              enableDragging: true,
+              onValueChanged: (val) => onVolumeChange(val),
+              onValueChangeEnd: (val) => onVolumeChangeEnd(val),
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: const Color(0xffE7E9E8),
+                      border: Border.all(color: KColors.kLightColor, width: .5),
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12.withOpacity(.2),
+                            spreadRadius: .8,
+                            blurRadius: .8,
+                            offset: const Offset(1, 2))
+                      ]),
+                  padding: const EdgeInsets.all(3),
+                  child: const Icon(
+                    Icons.volume_up_outlined,
+                    size: 18,
+                    color: Colors.black45,
+                  )),
+            )
+          ],
         )
       ],
     );
   }
 
   Widget get _support {
-    return Stack(
-      children: [
-        supportText,
-        SizedBox(
-          height: MediaQuery.of(context).size.height * .22,
-        ),
-        Positioned(
-          left: MediaQuery.of(context).size.width * .42,
-          bottom: 15,
-          child: donate,
-        )
-      ],
+    return Column(
+      children: [supportText, const SizedBox(height: 25), donate],
     );
   }
 
   Widget get supportText {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top: 8),
+        margin: EdgeInsets.only(left: 15, right: 15),
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           children: const [
             Text(
-                "Please Support", style: TextStyle(fontSize: 16),
+              "Please Support",
+              style: TextStyle(fontSize: 14),
             ),
             Text(
-                "Chris Asante", style: TextStyle(fontSize: 16),
+              "Chris Asante",
+              style: TextStyle(fontSize: 14),
             )
           ],
         ),
@@ -283,8 +258,8 @@ class _IRadioState extends State<IRadio> {
       onTap: () => newPage(context, 'give_2'),
       child: Container(
         padding: EdgeInsets.all(5),
-        width: 60,
-        height: 60,
+        width: 65,
+        height: 65,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(45),
@@ -305,10 +280,12 @@ class _IRadioState extends State<IRadio> {
               height: 18,
               width: 22,
             ),
-            SizedBox(height: 1,),
+            SizedBox(
+              height: 1,
+            ),
             Text(
               'Donate',
-              style: TextStyle(fontSize: 14, color: KColors.kPrimaryColor),
+              style: TextStyle(fontSize: 12, color: KColors.kPrimaryColor),
             )
           ],
         ),
@@ -359,24 +336,24 @@ class _IRadioState extends State<IRadio> {
   }
 
   Widget _schedule() {
-    return FutureBuilder(
+    return FutureBuilder<List<DayModel>>(
         future: myFuture,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            dynamic programmes = snapshot.data;
+            List<DayModel> days = snapshot.data;
             return ListView.builder(
-                itemCount: programmes.length,
+                itemCount: days.length,
                 itemBuilder: (BuildContext context, int i) {
                   return Column(
                     children: [
                       GFAccordion(
-                          margin: EdgeInsets.all(0),
+                          margin: const EdgeInsets.all(0),
                           titlePadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 14),
                           expandedTitleBackgroundColor: Colors.white,
                           titleChild: Text(
-                              programmes[i]['attributes']['title']!,
+                              days[i].title,
                               style: TextStyle(
                                   color: KColors.kPrimaryColor, fontSize: 22)),
                           collapsedIcon: Icon(Icons.add_circle_outline_outlined,
@@ -385,14 +362,12 @@ class _IRadioState extends State<IRadio> {
                               color: KColors.kPrimaryColor, size: 26),
                           contentChild: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: programmes.isEmpty
-                                ? Text('No programmes for this day')
+                            child: days[i].programmes.isEmpty
+                                ? const Text('No programmes for this day')
                                 : ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount: programmes[i]['attributes']
-                                            ['programmes']['data']
-                                        .length,
+                                    itemCount: days[i].programmes.length,
                                     itemBuilder: (BuildContext context, int j) {
                                       return Row(
                                         children: [
@@ -402,16 +377,10 @@ class _IRadioState extends State<IRadio> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                  programmes[i]['attributes']
-                                                              ['programmes']
-                                                          ['data'][j]
-                                                      ['attributes']['title']!,
+                                                  days[i].programmes[j].title,
                                                   style:
-                                                      TextStyle(fontSize: 18)),
-                                              Text(programmes[i]['attributes']
-                                                          ['programmes']['data']
-                                                      [j]['attributes']['time']
-                                                  .toString())
+                                                      const TextStyle(fontSize: 18)),
+                                              Text(days[i].programmes[j].time)
                                             ],
                                           )),
                                           const SizedBox(width: 24),
@@ -437,9 +406,12 @@ class _IRadioState extends State<IRadio> {
           }
 
           if (snapshot.hasError) {
-            return const Center(
-                child: Text('An error occured getting Radio Schedule',
-                    style: TextStyle(fontSize: 22)));
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(
+                  child: Text('An error occurred getting Radio Schedule',
+                      style: TextStyle(fontSize: 16))),
+            );
           }
 
           return Center(

@@ -9,7 +9,9 @@ import 'package:pamm2/src/components/kButton.dart';
 import 'package:pamm2/src/components/kFormField.dart';
 import 'package:pamm2/src/components/webViewBuilder.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
-import 'package:pamm2/src/repos/shopRepo.dart';
+import 'package:pamm2/src/models/product.dart';
+
+import '../repos/shopRepo.dart';
 
 class Billing extends StatefulWidget {
   const Billing({Key? key}) : super(key: key);
@@ -19,12 +21,13 @@ class Billing extends StatefulWidget {
 }
 
 class _BillingState extends State<Billing> {
-  final GlobalKey _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   CartController cartController = Get.find<CartController>();
   double total = 0;
   int quantity = 0;
   bool isLoading = false;
+  bool _showPage = false;
 
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
@@ -39,9 +42,18 @@ class _BillingState extends State<Billing> {
   void initState() {
     super.initState();
 
+    if (cartController.cartItems.isEmpty) {
+      setState(() {
+        _showPage = false;
+      });
+    } else {
+      _showPage = true;
+    }
+
     for (var element in cartController.cartItems) {
       int qty = int.parse(element['qty']);
-      dynamic unit_price = element['product']['price'];
+      dynamic unit_price =
+          int.parse((element['product'] as ProductModel).price);
       dynamic unit_total = qty * unit_price;
 
       setState(() {
@@ -52,74 +64,98 @@ class _BillingState extends State<Billing> {
   }
 
   void _placeOrder() async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        setState(() {
+          isLoading = true;
+        });
 
-    setState(() {
-      isLoading = true;
-    });
+        dynamic payload = {
+          "firstname": firstnameController.text,
+          "lastname": lastnameController.text,
+          "phone": phoneController.text,
+          "email": emailController.text.isEmpty
+              ? "noreply@email.com"
+              : emailController.text,
+          "country": countryController.text,
+          "region": regionController.text,
+          "address": addressController.text,
+          "additional_info": additionalInfoController.text,
+          "cartItems": cartController.cartItems.map((e) {
+            return {
+              "product": (e['product'] as ProductModel).id,
+              "quantity": e['qty']
+            };
+          }).toList(),
+          "quantity": quantity
+        };
 
-    dynamic payload = {
-      "data": {
-        "firstname": firstnameController.text,
-        "lastname": lastnameController.text,
-        "phone": phoneController.text,
-        "email": emailController.text.isEmpty ? "noreply@email.com" : emailController.text,
-        "country": countryController.text,
-        "region": regionController.text,
-        "address": addressController.text,
-        "additional_info": additionalInfoController.text,
-        "products": cartController.cartItems.map((e) => e['id']).toList(),
-        "quantity": quantity,
-        "paid": false,
-        "fulfilled": false
+        ShopRepo shopRepo = ShopRepo();
+        var res = await shopRepo.createOrder(payload);
+
+        if (res["status"] == "Success") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (BuildContext context) {
+            return Scaffold(
+              appBar: _appBar(),
+              body: WebViewBuilder(url: res["data"]["checkoutUrl"]),
+            );
+          }));
+        } else {
+          Get.snackbar('Purchase', 'An error occurred processing order',
+              snackPosition: SnackPosition.BOTTOM,
+              margin: const EdgeInsets.only(
+                  top: 10, right: 10, left: 10, bottom: 25),
+              backgroundColor: KColors.kLightColor,
+              icon: const Icon(Icons.done, color: Colors.red));
+        }
+
+        setState(() {
+          isLoading = false;
+        });
       }
-    };
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
 
-    ShopRepo shopRepo = ShopRepo();
-    await shopRepo.createOrder(payload);
-
-    dynamic paymentPayload = {
-      "description":
-          '${firstnameController.text} ${lastnameController.text} " - items purchase"',
-      "totalAmount": total + 20
-    };
-
-    dynamic response = await shopRepo.makePayment(paymentPayload);
-    dynamic payment_resp = jsonDecode(response);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                WebViewBuilder(url: payment_resp["data"]["checkoutUrl"])));
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _appBar(),
-      body: _body(),
-    );
+      Get.snackbar('Purchase', e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          margin:
+              const EdgeInsets.only(top: 10, right: 10, left: 10, bottom: 25),
+          backgroundColor: KColors.kLightColor,
+          icon: const Icon(Icons.done, color: Colors.red));
+    }
   }
 
   PreferredSizeWidget _appBar() {
     return AppBar(
         elevation: 0,
-        systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: KColors.kPrimaryColor),
         automaticallyImplyLeading: true,
-        foregroundColor: KColors.kLightColor,
+        foregroundColor: KColors.kTextColorLight,
         backgroundColor: KColors.kPrimaryColor,
-        title: const Text('BILLING INFO', style: TextStyle(fontSize: 18)));
+        title: const Text(
+          'Complete Info',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _appBar(),
+        body: _showPage
+            ? _body()
+            : const Center(
+                child: Text("Please add Items to cart to continue"),
+              ));
   }
 
   Widget _body() {
     return SingleChildScrollView(
       child: Form(
-        key: _formkey,
+        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Column(
@@ -141,25 +177,32 @@ class _BillingState extends State<Billing> {
                               SizedBox(
                                 height: 80,
                                 width: 80,
-                                child: CachedNetworkImage(
-                                    imageUrl: cartItem['product']['images']
-                                        ['data'][0]['attributes']['url'],
-                                    placeholder:
-                                        (BuildContext context, String url) {
-                                      return const Icon(Icons.shopping_cart,
-                                          size: 30);
-                                    },
-                                    fit: BoxFit.cover),
+                                child: (cartItem['product'] as ProductModel)
+                                        .images
+                                        .isEmpty
+                                    ? const Icon(Icons.shopping_cart, size: 30)
+                                    : CachedNetworkImage(
+                                        imageUrl: (cartItem['product']
+                                                as ProductModel)
+                                            .images[0]
+                                            .url,
+                                        placeholder:
+                                            (BuildContext context, String url) {
+                                          return const Icon(Icons.shopping_cart,
+                                              size: 30);
+                                        },
+                                        fit: BoxFit.cover),
                               ),
                               const SizedBox(width: 15),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(cartItem['product']['title']),
+                                  Text((cartItem['product'] as ProductModel)
+                                      .title),
                                   Text(
-                                      'Amount: ${cartItem['qty']} x GHS ${cartItem['product']['price']}'),
+                                      'Amount: ${cartItem['qty']} x GHS ${int.parse((cartItem['product'] as ProductModel).price)}'),
                                   Text(
-                                      'Total: GHS ${double.parse(cartItem['qty']) * cartItem['product']['price']}'),
+                                      'Total: GHS ${double.parse(cartItem['qty']) * int.parse((cartItem['product'] as ProductModel).price)}'),
                                 ],
                               )
                             ],
@@ -171,6 +214,12 @@ class _BillingState extends State<Billing> {
                               child: IconButton(
                                   onPressed: () {
                                     cartController.removeFromCart(cartItem);
+                                    if (cartController.cartItems.isEmpty) {
+                                      setState(() {
+                                        _showPage = false;
+                                      });
+                                    }
+
                                     setState(() {});
                                   },
                                   icon: Icon(Icons.close)))
@@ -182,24 +231,42 @@ class _BillingState extends State<Billing> {
               const SizedBox(height: 20),
               KFormField(
                 label: 'Firstname',
+                validate: true,
                 controller: firstnameController,
               ),
               const SizedBox(height: 20),
               KFormField(
                 label: 'Lastname',
+                validate: true,
                 controller: lastnameController,
               ),
               const SizedBox(height: 20),
               KFormField(
-                  label: 'Phone', controller: phoneController),
+                label: 'Phone',
+                controller: phoneController,
+                validate: true,
+              ),
               const SizedBox(height: 20),
-              KFormField(label: 'Email (optional)', controller: emailController),
+              KFormField(
+                  label: 'Email (optional)', controller: emailController),
               const SizedBox(height: 20),
-              KFormField(label: 'Country', controller: countryController),
+              KFormField(
+                label: 'Country',
+                controller: countryController,
+                validate: true,
+              ),
               const SizedBox(height: 20),
-              KFormField(label: 'Region/State', controller: regionController),
+              KFormField(
+                label: 'Region/State',
+                controller: regionController,
+                validate: true,
+              ),
               const SizedBox(height: 20),
-              KFormField(label: 'Address', controller: addressController),
+              KFormField(
+                label: 'Address',
+                controller: addressController,
+                validate: true,
+              ),
               const SizedBox(height: 20),
               KFormField(
                   label: 'Additional Info',
@@ -214,8 +281,9 @@ class _BillingState extends State<Billing> {
               const SizedBox(height: 10),
               KButton(
                   onPressed: _placeOrder,
-                  label: isLoading ? '...loading' :
-                      'Confirm Order | GHS ${(total + 20).toStringAsFixed(2)}',
+                  label: isLoading
+                      ? '...loading'
+                      : 'Confirm Order | GHS ${(total + 20).toStringAsFixed(2)}',
                   showIcon: false)
             ],
           ),

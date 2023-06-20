@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pamm2/config.dart';
@@ -39,42 +40,48 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: GoogleFonts.openSansTextTheme(KTextTheme.textTheme),
-        inputDecorationTheme: TextFieldTheme.textFieldTheme,
-        primaryColor: KColors.kPrimaryColor,
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: KColors.kLightColor),
-      ),
-      initialRoute: 'splash',
-      routes: {
-        '/': (context) => const Welcome(),
-        'splash': (context) => const SplashScreen(),
-        'home': (context) => const Home(),
-        'archives': (context) => const Archives(),
-        'about': (context) => const About(),
-        'bible': (context) => const Bible(),
-        'billing': (context) => const Billing(),
-        'give': (context) => const Give(),
-        'give_2': (context) => const GiveAnnex(),
-        'login': (context) => const Login(),
-        'radio': (context) => const IRadio(),
-        'tv': (context) => const TV(),
-        'pama': (context) => const PAMA(),
-        'partner': (context) => const Partner(),
-        'store': (context) => const Store(),
-        'store_2': (context) => const StoreAnnex(),
-        'social': (context) => const Social(),
+    return ScreenUtilInit(
+        designSize: const Size(360, 690),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) {
+          return GetMaterialApp(
+            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              textTheme: GoogleFonts.openSansTextTheme(KTextTheme.textTheme),
+              inputDecorationTheme: TextFieldTheme.textFieldTheme,
+              primaryColor: KColors.kPrimaryColor,
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: KColors.kLightColor),
+            ),
+            initialRoute: 'splash',
+            routes: {
+              '/': (context) => const Welcome(),
+              'splash': (context) => const SplashScreen(),
+              'home': (context) => const Home(),
+              'archives': (context) => const Archives(),
+              'about': (context) => const About(),
+              'bible': (context) => const Bible(),
+              'billing': (context) => const Billing(),
+              'give': (context) => const Give(),
+              'give_2': (context) => const GiveAnnex(),
+              'login': (context) => const Login(),
+              'radio': (context) => const IRadio(),
+              'tv': (context) => const TV(),
+              'pama': (context) => const PAMA(),
+              'partner': (context) => const Partner(),
+              'store': (context) => const Store(),
+              'store_2': (context) => const StoreAnnex(),
+              'social': (context) => const Social(),
 
-        //  drawer routes
-        'testimony': (context) => const Testimony(),
-        'prayer': (context) => const Prayer(),
-        'events_2': (context) => const EventAnnex(),
-        'contact': (context) => const Contact()
-      },
-    );
+              //  drawer routes
+              'testimony': (context) => const Testimony(),
+              'prayer': (context) => const Prayer(),
+              'events_2': (context) => const EventAnnex(),
+              'contact': (context) => const Contact()
+            },
+          );
+        });
   }
 }

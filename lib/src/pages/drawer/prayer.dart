@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pamm2/config.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:pamm2/src/components/kButton.dart';
 import 'package:pamm2/src/components/kFormField.dart';
+import 'package:pamm2/src/models/requestType.dart';
+import 'package:pamm2/src/repos/miscRepo.dart';
 
 class Prayer extends StatefulWidget {
   final String? src;
@@ -19,6 +23,8 @@ class _PrayerState extends State<Prayer> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _prayerController = TextEditingController();
+
+  var isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -150,8 +156,44 @@ class _PrayerState extends State<Prayer> {
 
   Widget _submitPrayer() {
     return KButton(
-      onPressed: () {},
-      label: 'Submit',
+      onPressed: () async {
+        setState(() {
+          isLoading = true;
+        });
+        var payload = {
+          "fullname": _fullnameController.value.text,
+          "country": _countryLabel.text,
+          "email": _emailController.value.text,
+          "phoneNumber": _phoneController.value.text,
+          "requestType": "PRAYER",
+          "content": _prayerController.value.text
+        };
+
+        MiscRepo miscRepo = MiscRepo();
+
+        try {
+          await miscRepo.submitRequest(payload);
+          Get.snackbar('Prayer', 'Prayer request submitted Successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              margin: const EdgeInsets.only(
+                  top: 10, right: 10, left: 10, bottom: 25),
+              backgroundColor: KColors.kLightColor,
+              icon: const Icon(Icons.check, color: Colors.green));
+
+          setState(() {
+            isLoading = false;
+          });
+        }
+            catch (e) {
+              Get.snackbar('Prayer', 'An error occurred submitting prayer request',
+                  snackPosition: SnackPosition.BOTTOM,
+                  margin: const EdgeInsets.only(
+                      top: 10, right: 10, left: 10, bottom: 25),
+                  backgroundColor: KColors.kLightColor,
+                  icon: const Icon(Icons.error, color: Colors.red));
+            }
+      },
+      label: isLoading ? '...loading' :'Submit',
       showIcon: false,
       color: KColors.kPrimaryColor,
     );

@@ -7,13 +7,14 @@ import 'package:getwidget/getwidget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
 import 'package:pamm2/src/controllers/cart_controllelr.dart';
+import 'package:pamm2/src/models/product.dart';
 import 'package:pamm2/src/models/product_detail.dart';
 import 'package:pamm2/src/repos/shopRepo.dart';
 
 class ItemDetails extends StatefulWidget {
-  final int productId;
+  final ProductModel product;
 
-  const ItemDetails({Key? key, required this.productId}) : super(key: key);
+  const ItemDetails({Key? key, required this.product}) : super(key: key);
 
   static List thumbnails = [1, 2, 3, 4];
 
@@ -24,7 +25,6 @@ class ItemDetails extends StatefulWidget {
 class _ItemDetailsState extends State<ItemDetails> {
   final TextEditingController _qtyController = TextEditingController(text: '1');
   final ShopRepo shopRepo = ShopRepo();
-  late final Future myFuture;
 
   int currentIndex = 0;
 
@@ -34,7 +34,6 @@ class _ItemDetailsState extends State<ItemDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    myFuture = shopRepo.getProduct(widget.productId.toString());
   }
 
   @override
@@ -46,7 +45,7 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  Widget _thumbnail(thumbnail, index) {
+  Widget _thumbnail(ImageModel thumbnail, index) {
     return Opacity(
       opacity: currentIndex == index ? 1 : .2,
       child: GestureDetector(
@@ -60,7 +59,7 @@ class _ItemDetailsState extends State<ItemDetails> {
               border: Border.all(color: Colors.grey, width: .5),
               borderRadius: BorderRadius.circular(3)),
           child: CachedNetworkImage(
-              imageUrl: thumbnail['attributes']['url'],
+              imageUrl: thumbnail.url,
               placeholder: (BuildContext context, String url) {
                 return const Icon(Icons.shopping_cart, size: 30);
               },
@@ -70,12 +69,12 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  Widget _imageGallery(context, List images) {
+  Widget _imageGallery(context, List<ImageModel> images) {
     return Column(
       children: [
         Center(
-          child: CachedNetworkImage(
-              imageUrl: images[currentIndex]['attributes']['url'],
+          child: images.isEmpty ? const SizedBox.shrink() : CachedNetworkImage(
+              imageUrl: images[currentIndex].url,
               placeholder: (BuildContext context, String url) {
                 return const Icon(Icons.shopping_cart, size: 30);
               },
@@ -83,7 +82,7 @@ class _ItemDetailsState extends State<ItemDetails> {
               height: MediaQuery.of(context).size.height * .5),
         ),
         const SizedBox(height: 10),
-        Row(
+        images.isEmpty ? const SizedBox.shrink() : Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: images.asMap().map((key, value) => MapEntry(key, _thumbnail(value, key))).values.toList()
         ),
@@ -91,14 +90,14 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  Widget _productDetails(dynamic product) {
+  Widget _productDetails() {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 40),
-          Text(product['title']!, style: TextStyle(fontSize: 20)),
+          Text(widget.product.title, style: TextStyle(fontSize: 20)),
           const SizedBox(height: 10),
-          Text('GHS ${product['price'].toString()}',
+          Text('GHS ${widget.product.price}',
               style:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 18),
@@ -106,17 +105,17 @@ class _ItemDetailsState extends State<ItemDetails> {
             children: <Widget>[
               const Text('Availability: '),
               Text(
-                product['in_stock'] == true ? 'In stock' : 'Out of Stock',
-                style: TextStyle(color: product['in_stock'] == true ? Colors.green : Colors.red),
+                widget.product.inStock == true ? 'In stock' : 'Out of Stock',
+                style: TextStyle(color: widget.product.inStock == true ? Colors.green : Colors.red),
               )
             ],
           ),
           const SizedBox(height: 10),
-          Text(product['description']),
+          Text(widget.product.description),
         ]);
   }
 
-  Widget _callToAction(context, product, product_id) {
+  Widget _callToAction(context, product, productId) {
     return Row(
       children: [
         SizedBox(
@@ -132,7 +131,7 @@ class _ItemDetailsState extends State<ItemDetails> {
           width: MediaQuery.of(context).size.width * .35,
           child: TextButton(
               onPressed: () {
-                cartController.addToCart({'product': product , 'qty': _qtyController.value.text, 'id': product_id});
+                cartController.addToCart({'product': product , 'qty': _qtyController.value.text, 'id': productId});
                 Get.snackbar('Title', 'Item added to cart',
                     snackPosition: SnackPosition.BOTTOM,
                     margin: const EdgeInsets.only(top:10, right: 10, left: 10, bottom: 25),
@@ -153,41 +152,26 @@ class _ItemDetailsState extends State<ItemDetails> {
   }
 
   Widget _body() {
-    return FutureBuilder(
-        future: myFuture,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            dynamic product = snapshot.data;
-
-            return Builder(builder: (BuildContext context) {
-              return (SingleChildScrollView(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 50),
-                    _imageGallery(context, product['attributes']['images']['data']!),
-                    _productDetails(product['attributes']),
-                    const SizedBox(height: 18),
-                    _callToAction(context, product['attributes'], product['id']),
-                    const SizedBox(height: 50),
-                    product['attributes']['care_guide_info'] != null
-                        ? _careInformation(product.careGuideInfo!)
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-              )));
-            });
-          }
-          if (snapshot.hasError) {
-            return const Center(child: Text('Sorry an error occured'));
-          }
-          return Center(
-            child: Lottie.asset('assets/lottie/loader.json'),
-          );
-        });
+    return Builder(builder: (BuildContext context) {
+      return (SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 28.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+                _imageGallery(context, widget.product.images),
+                _productDetails(),
+                const SizedBox(height: 18),
+                _callToAction(context, widget.product, widget.product.id),
+                const SizedBox(height: 50),
+                // product['attributes']['care_guide_info'] != null
+                //     ? _careInformation(product.careGuideInfo!)
+                //     : const SizedBox.shrink(),
+              ],
+            ),
+          )));
+    });
   }
 
   Widget _careInformation(String careGuidInfo) {

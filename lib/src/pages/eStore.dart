@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pamm2/config.dart';
+import 'package:pamm2/src/models/category.dart';
+import 'package:pamm2/src/models/product.dart';
 import 'package:pamm2/src/pages/itemDetails.dart';
 import 'package:pamm2/src/repos/shopRepo.dart';
 
@@ -31,7 +34,7 @@ class _StoreState extends State<Store> {
     );
   }
 
-  Widget _itemCard(dynamic product) {
+  Widget _itemCard(ProductModel product) {
     return Builder(builder: (BuildContext context) {
       return Container(
         padding:
@@ -47,7 +50,7 @@ class _StoreState extends State<Store> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: CachedNetworkImage(
-                    imageUrl: product['attributes']['images']!['data'][0]['attributes']['url'],
+                    imageUrl: product.images[0].url,
                     placeholder: (BuildContext context, String url) {
                       return const Icon(Icons.shopping_cart, size: 30);
                     },
@@ -56,11 +59,13 @@ class _StoreState extends State<Store> {
               ),
               Column(
                 children: [
-                  Text(product['attributes']!['category']!['data']['attributes']['title'],
+                  Text(
+                      product.category.title,
                       style: const TextStyle(fontSize: 12)),
                   Text(
-                    product['attributes']['title']!,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    product.title,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 25),
                   TextButton(
@@ -71,9 +76,7 @@ class _StoreState extends State<Store> {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => ItemDetails(
-                                    productId: product['id']!,
-                                  ))),
+                              builder: (BuildContext context) => ItemDetails(product: product))),
                       child: const Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 35, vertical: 10),
@@ -90,15 +93,16 @@ class _StoreState extends State<Store> {
   }
 
   Widget _body() {
-    return FutureBuilder<List>(
+    return FutureBuilder<List<ProductModel>>(
         future: shopRepo.getProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Sorry an error occured. Try again later'));
+            return const Center(
+                child: Text('Sorry an error occurred. Try again later'));
           }
 
           if (snapshot.hasData) {
-            List products = snapshot.data;
+            List<ProductModel> products = snapshot.data;
 
             return Container(
               decoration: BoxDecoration(color: KColors.kTextColorDark),
